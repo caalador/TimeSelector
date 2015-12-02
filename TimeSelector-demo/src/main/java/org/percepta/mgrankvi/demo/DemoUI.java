@@ -36,6 +36,13 @@ public class DemoUI extends UI
 
         // Initialize our new UI component
         final TimeSelector component = new TimeSelector();
+component.addSelectionChangeListener(new TimeSelector.SelectionChangeListener() {
+
+    @Override
+    public void selectionChanged(TimeSelector.SelectionChangeEvent event) {
+        System.out.println(event.getHours() + ":" + event.getMinutes());
+    }
+});
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();

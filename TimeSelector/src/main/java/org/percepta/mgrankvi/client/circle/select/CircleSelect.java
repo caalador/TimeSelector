@@ -60,19 +60,6 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                 @Override
                 public void onClick(ClickEvent clickEvent) {
                     circleSelectCallback.valueSelection(selection);
-//                    if (select == Target.HOURS) {
-//                        hourSelection = selection;
-//                        if(half == Target.PM) {
-//                            hourSelection += 12;
-//                        }
-//
-//                        select = Target.MINUTES;
-//                        hour.getElement().getStyle().setColor(NUMBER_INACTIVE);
-//                        minute.getElement().getStyle().setColor(NUMBER_SELECTED);
-//                        paint();
-//                    } else {
-//                        minuteSelection = selection;
-//                    }
                 }
             });
             paint();
@@ -131,6 +118,15 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         setSlices(sectors*2);
     }
 
+    /**
+     * Set the selected time to show as selected
+     * @param selection Selected time wanted
+     */
+    public void setSelection(int selection) {
+        this.selection = selection;
+        paint();
+    }
+
     private void paint() {
         clearCanvas();
 
@@ -158,8 +154,6 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         // Init visible number positions
         if (numbers.isEmpty()) {
 
-//            for (int i = 1; i <= 12; i++) {
-//                int degrees = (i * 30);
             int degreesPerStep = 360 / values.size();
             for (int i = 1; i <= values.size(); i++) {
                 int degrees = i * degreesPerStep;
@@ -175,35 +169,6 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         if (selection != null) {
             context.setFillStyle("gainsboro");
 
-//            if (select == Target.HOURS) {
-//                for (Number number : numbers) {
-//                    if (number.number == selection) {
-//
-//                        int degrees = (number.number * 30);
-//                        double rad = Math.toRadians(degrees) - (0.5 * Math.PI);
-//
-//                        context.setStrokeStyle(TOP_BG);
-//                        context.beginPath();
-//                        context.moveTo(circleX, circleY);
-//                        double x = circleX + (Math.cos(rad) * (radian - 15));
-//                        double y = circleY + (Math.sin(rad) * (radian - 15));
-//
-//                        context.setStrokeStyle(TOP_BG);
-//                        context.beginPath();
-//                        context.moveTo(circleX, circleY);
-//                        context.lineTo(x, y);
-//                        context.closePath();
-//                        context.stroke();
-//
-//                        context.beginPath();
-//                        context.setFillStyle(TOP_BG);
-//                        context.arc(x, y, Math.sqrt(textWidth * textWidth + 15 * 15) / 2, 0, 2 * Math.PI, false);
-//                        context.closePath();
-//                        context.fill();
-//                        break;
-//                    }
-//                }
-//            } else {
             int degrees = (selection * (360 / (numSlices / 2)));
             double rad = Math.toRadians(degrees) - (0.5 * Math.PI);
 
@@ -228,7 +193,6 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             context.closePath();
             context.fill();
         }
-//        }
 
         context.setStrokeStyle("black");
         context.setFillStyle("black");
@@ -259,7 +223,6 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             //Now theta is in the range [0, 2*pi]
             //Use this value to determine which slice of the circle the point resides in.
             //For example:
-//            int numSlices = select == Target.HOURS ? 24 : 120;
             int whichSlice = 0;
             double sliceSize = Math.PI * 2 / numSlices;
             double sliceStart;
@@ -274,25 +237,16 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
             VConsole.log("in slice " + whichSlice + " - Theta: " + Math.toDegrees(theta));
 
-            Integer number = (int) Math.ceil(whichSlice / 2);//sectorMap.get(whichSlice);
+            Integer number = (int) Math.ceil(whichSlice / 2);
+            // Special case for 1-12 hour clock
             if (number == 0 && numSlices == 24) number = 12;
             VConsole.log("Minute value: " + Math.ceil(Math.toDegrees(theta) / 6) % 60);
             VConsole.log("Sector: " + format.format(number));
             selection = number;
 
             circleSelectCallback.valueHover(number);
-
-//            if (select == Target.HOURS) {
-//                if (half == Target.PM) {
-//                    number += 12;
-//                }
-//                hour.setText(NumberFormat.getFormat("00").format(number));
-//            } else {
-//                number = number % 60;
-//                minute.setText(NumberFormat.getFormat("00").format(number));
-//            }
         } else {
-            circleSelectCallback.valueHover(selection);
+            circleSelectCallback.mouseOutEvent();
         }
 
         paint();
@@ -300,7 +254,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
     @Override
     public void onMouseOut(MouseOutEvent mouseOutEvent) {
-        circleSelectCallback.valueSelection(selection);
+        circleSelectCallback.mouseOutEvent();
         paint();
     }
 

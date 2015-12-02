@@ -7,6 +7,6 @@ import com.vaadin.shared.communication.ClientRpc;
 public interface TimeSelectorClientRpc extends ClientRpc {
 
 	// Example API: Fire up alert box in client
-	public void alert(String message);
+	void alert(String message);
 
 }

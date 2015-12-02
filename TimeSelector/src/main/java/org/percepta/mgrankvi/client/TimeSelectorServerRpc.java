@@ -7,6 +7,6 @@ import com.vaadin.shared.communication.ServerRpc;
 public interface TimeSelectorServerRpc extends ServerRpc {
 
 	// Example API: Widget click is clicked
-	public void clicked(MouseEventDetails mouseDetails);
+	void valueSelection(int hours, int minutes);
 
 }

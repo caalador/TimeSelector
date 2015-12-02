@@ -1,6 +1,8 @@
 package org.percepta.mgrankvi.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.annotations.OnStateChange;
@@ -29,6 +31,13 @@ public class TimeSelectorConnector extends AbstractComponentConnector {
             }
         });
 
+        getWidget().addSelectionHandler(new SelectionHandler(){
+
+            @Override
+            public void timeSelection(int hour, int minute) {
+                rpc.valueSelection(hour, minute);
+            }
+        });
         // We choose listed for mouse clicks for the widget
 //		getWidget().addClickHandler(new ClickHandler() {
 //			public void onClick(ClickEvent event) {
@@ -68,10 +77,8 @@ public class TimeSelectorConnector extends AbstractComponentConnector {
         super.onStateChanged(stateChangeEvent);
 
         // State is directly readable in the client after it is set in server
-//		final String text = getState().text;
-//		getWidget().setText(text);
-//        getWidget().setWidth(getState().width);
-//        getWidget().setHeight(getState().height);
+        getWidget().setWidth(getState().width);
+        getWidget().setHeight(getState().height);
     }
 
 
