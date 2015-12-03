@@ -16,6 +16,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import java.util.Date;
+
 @Theme("demo")
 @Title("MyComponent Add-on Demo")
 @SuppressWarnings("serial")
@@ -43,6 +45,9 @@ component.addSelectionChangeListener(new TimeSelector.SelectionChangeListener() 
         System.out.println(event.getHours() + ":" + event.getMinutes());
     }
 });
+
+        Date time = new Date();
+        component.setTime(time.getHours(), time.getMinutes());
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();

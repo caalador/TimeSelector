@@ -26,8 +26,9 @@ public class TimeSelectorConnector extends AbstractComponentConnector {
 
         // To receive RPC events from server, we register ClientRpc implementation
         registerRpc(TimeSelectorClientRpc.class, new TimeSelectorClientRpc() {
-            public void alert(String message) {
-                Window.alert(message);
+            @Override
+            public void setTime(int hours, int minutes) {
+                getWidget().setTime(hours, minutes);
             }
         });
 
