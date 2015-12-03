@@ -8,14 +8,11 @@ import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.percepta.mgrankvi.client.circle.select.CircleSelect;
 import org.percepta.mgrankvi.client.circle.select.CircleSelectCallback;
@@ -58,15 +55,10 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         this.selectionHandler = selectionHandler;
         content = new VerticalPanel();
 
-//        SimplePanel baseContent = new SimplePanel();
-//        baseContent.add(content);
-//        baseContent.getElement().getStyle().setBackgroundColor("white");
-//        initWidget(baseContent);
-
         getElement().getStyle().setBackgroundColor("white");
         // CSS class-name should not be v- prefixed
         setStyleName("c-" + CLASS_NAME);
-add(content);
+        add(content);
         top = new HorizontalPanel();
         top.setWidth("100%");
         top.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -259,6 +251,10 @@ add(content);
     @Override
     public void mouseOutEvent() {
         setTimeSelection();
+        updateClock();
+    }
+
+    private void updateClock() {
         if (select.equals(Target.HOURS)) {
             clock.setSelection(hourSelection);
         } else {
@@ -266,11 +262,20 @@ add(content);
         }
     }
 
-    public void setTimeSelection() {
+    private void setTimeSelection() {
         hour.setText(NumberFormat.getFormat("00").format(hourSelection));
         minute.setText(NumberFormat.getFormat("00").format(minuteSelection));
     }
 
+    public void setTimeSelection(int hour, int minute) {
+        hourSelection = hour;
+        minuteSelection = minute;
+        if(hour > 12) {
+            half = Target.PM;
+        }
+        setTimeSelection();
+        updateClock();
+    }
     /*
      * Returns array with size in index 0 unit in index 1. Null or empty string
      * will produce Size(-1, "px");
