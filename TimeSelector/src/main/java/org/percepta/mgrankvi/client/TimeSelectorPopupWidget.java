@@ -159,12 +159,19 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         control.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
         cancel = new Button("Cancel");
+        cancel.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                setHourSelection();
+                hide();
+            }
+        });
         ok = new Button("Ok");
         ok.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
                 selectionHandler.timeSelection(hourSelection, minuteSelection);
-                select = Target.HOURS;
+                setHourSelection();
                 hide();
             }
         });
@@ -178,9 +185,13 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
 
     private void setHourSelection() {
         setHours();
+        select = Target.HOURS;
     }
 
     private void setHours() {
+        hour.getElement().getStyle().setColor(NUMBER_SELECTED);
+        minute.getElement().getStyle().setColor(NUMBER_INACTIVE);
+
         clock.setValues(getHourValues());
         clock.setSelection(hourSelection);
         clock.setSectors(12);
@@ -256,9 +267,9 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
 
     private void updateClock() {
         if (select.equals(Target.HOURS)) {
-            clock.setSelection(hourSelection);
+            setHourSelection();
         } else {
-            clock.setSelection(minuteSelection);
+            setMinuteSelection();
         }
     }
 
@@ -272,6 +283,12 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         minuteSelection = minute;
         if(hour > 12) {
             half = Target.PM;
+            pm.getElement().getStyle().setColor(DAY_TIME_SELECTED);
+            am.getElement().getStyle().setColor(DAY_TIME_INACTIVE);
+        } else {
+            half = Target.AM;
+            am.getElement().getStyle().setColor(DAY_TIME_SELECTED);
+            pm.getElement().getStyle().setColor(DAY_TIME_INACTIVE);
         }
         setTimeSelection();
         updateClock();
