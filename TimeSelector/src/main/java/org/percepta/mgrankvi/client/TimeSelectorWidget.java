@@ -22,6 +22,7 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
     public TimeSelectorWidget() {
 
         content = new Label("12:00");
+        content.setStyleName("time-label");
         content.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {

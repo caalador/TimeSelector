@@ -25,12 +25,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
 
     private enum Target {HOURS, MINUTES, AM, PM}
 
-    private String TOP_BG = "mediumaquamarine";
-    private String NUMBER_SELECTED = "white";
-    private String NUMBER_INACTIVE = "lightseagreen";
-    private String DAY_TIME_SELECTED = "lavender";
-    private String DAY_TIME_INACTIVE = "darkseagreen";
-
     private NumberFormat format = NumberFormat.getFormat("00");
 
     private static RegExp sizePattern = RegExp.compile("^(-?\\d+(\\.\\d+)?)(%|px|em|ex|in|cm|mm|pt|pc)?$");
@@ -62,14 +56,16 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         top = new HorizontalPanel();
         top.setWidth("100%");
         top.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        top.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 
         content.add(top);
         content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
-        top.getElement().getStyle().setBackgroundColor(TOP_BG);
+        top.setStyleName("selector-popup-top");
 
         int fontSize = 40;
         hour = new Label("12");
+        hour.setStyleName("selector-number");
         hour.setHeight("100%");
         hour.getElement().getStyle().setFontSize(fontSize, Style.Unit.PX);
         hour.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
@@ -77,12 +73,11 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
             @Override
             public void onClick(ClickEvent clickEvent) {
                 select = Target.HOURS;
-                hour.getElement().getStyle().setColor(NUMBER_SELECTED);
-                minute.getElement().getStyle().setColor(NUMBER_INACTIVE);
                 setHourSelection();
             }
         });
         minute = new Label("00");
+        minute.setStyleName("selector-number");
         minute.setHeight("100%");
         minute.getElement().getStyle().setFontSize(fontSize, Style.Unit.PX);
         minute.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
@@ -98,8 +93,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         divider.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
 
         // Default selection colors.
-        hour.getElement().getStyle().setColor(NUMBER_SELECTED);
-        minute.getElement().getStyle().setColor(NUMBER_INACTIVE);
+        hour.addStyleName("selected");
 
         top.add(hour);
         top.add(divider);
@@ -111,7 +105,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         amToPm.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 
         am = new Button("AM");
-        clearButtonStyle(am.getElement());
+        am.setStyleName("day-time");
         am.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
@@ -120,14 +114,14 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
                     setTimeSelection();
                 }
                 half = Target.AM;
-                am.getElement().getStyle().setColor(DAY_TIME_SELECTED);
-                pm.getElement().getStyle().setColor(DAY_TIME_INACTIVE);
+                am.addStyleName("selected");
+                pm.removeStyleName("selected");
                 if (select.equals(Target.HOURS))
                     setHourSelection();
             }
         });
         pm = new Button("PM");
-        clearButtonStyle(pm.getElement());
+        pm.setStyleName("day-time");
         pm.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
@@ -136,15 +130,14 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
                     setTimeSelection();
                 }
                 half = Target.PM;
-                pm.getElement().getStyle().setColor(DAY_TIME_SELECTED);
-                am.getElement().getStyle().setColor(DAY_TIME_INACTIVE);
+                pm.addStyleName("selected");
+                am.removeStyleName("selected");
                 if (select.equals(Target.HOURS))
                     setHourSelection();
             }
         });
 
-        am.getElement().getStyle().setColor(DAY_TIME_SELECTED);
-        pm.getElement().getStyle().setColor(DAY_TIME_INACTIVE);
+        am.addStyleName("selected");
 
         amToPm.add(am);
         amToPm.add(pm);
@@ -189,8 +182,8 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     }
 
     private void setHours() {
-        hour.getElement().getStyle().setColor(NUMBER_SELECTED);
-        minute.getElement().getStyle().setColor(NUMBER_INACTIVE);
+        hour.addStyleName("selected");
+        minute.removeStyleName("selected");
 
         clock.setValues(getHourValues());
         clock.setSelection(hourSelection);
@@ -199,8 +192,8 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
 
     private void setMinuteSelection() {
         select = Target.MINUTES;
-        hour.getElement().getStyle().setColor(NUMBER_INACTIVE);
-        minute.getElement().getStyle().setColor(NUMBER_SELECTED);
+        minute.addStyleName("selected");
+        hour.removeStyleName("selected");
 
         clock.setValues(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60);
         clock.setSelection(minuteSelection);
@@ -212,13 +205,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
             return new Integer[]{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
         }
         return new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    }
-
-    private void clearButtonStyle(Element element) {
-        element.getStyle().setProperty("background", "none");
-        element.getStyle().setProperty("border", "none");
-        element.getStyle().setProperty("outline", "none");
-        element.getStyle().setFontWeight(Style.FontWeight.BOLD);
     }
 
     // Set width for time selection component
@@ -283,12 +269,12 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         minuteSelection = minute;
         if(hour > 12) {
             half = Target.PM;
-            pm.getElement().getStyle().setColor(DAY_TIME_SELECTED);
-            am.getElement().getStyle().setColor(DAY_TIME_INACTIVE);
+            pm.addStyleName("selected");
+            am.removeStyleName("selected");
         } else {
             half = Target.AM;
-            am.getElement().getStyle().setColor(DAY_TIME_SELECTED);
-            pm.getElement().getStyle().setColor(DAY_TIME_INACTIVE);
+            am.addStyleName("selected");
+            pm.removeStyleName("selected");
         }
         setTimeSelection();
         updateClock();
