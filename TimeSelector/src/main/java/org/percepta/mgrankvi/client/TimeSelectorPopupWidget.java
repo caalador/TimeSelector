@@ -49,9 +49,8 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         this.selectionHandler = selectionHandler;
         content = new VerticalPanel();
 
-        getElement().getStyle().setBackgroundColor("white");
         // CSS class-name should not be v- prefixed
-        setStyleName("c-" + CLASS_NAME);
+        setStyleName("c-" + CLASS_NAME + "-popup");
         add(content);
         top = new HorizontalPanel();
         top.setWidth("100%");
@@ -63,12 +62,9 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
 
         top.setStyleName("selector-popup-top");
 
-        int fontSize = 40;
         hour = new Label("12");
         hour.setStyleName("selector-number");
         hour.setHeight("100%");
-        hour.getElement().getStyle().setFontSize(fontSize, Style.Unit.PX);
-        hour.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
         hour.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
@@ -79,8 +75,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         minute = new Label("00");
         minute.setStyleName("selector-number");
         minute.setHeight("100%");
-        minute.getElement().getStyle().setFontSize(fontSize, Style.Unit.PX);
-        minute.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
         minute.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
@@ -89,8 +83,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         });
         Label divider = new Label(":");
         divider.setHeight("100%");
-        divider.getElement().getStyle().setFontSize(fontSize, Style.Unit.PX);
-        divider.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
+        divider.setStyleName("selector-number");
 
         // Default selection colors.
         hour.addStyleName("selected");

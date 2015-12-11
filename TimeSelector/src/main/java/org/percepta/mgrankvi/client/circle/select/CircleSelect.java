@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class CircleSelect extends Composite implements MouseMoveHandler, MouseOutHandler {
 
-    private String TOP_BG = "mediumaquamarine";
+    private String SELECTOR_COLOUR = "mediumaquamarine";
 
     private final Canvas time;
 
@@ -48,7 +48,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         this.values.addAll(Arrays.asList(values));
 
         SimplePanel baseContent = new SimplePanel();
-        baseContent.getElement().getStyle().setBackgroundColor("white");
+//        baseContent.getElement().getStyle().setBackgroundColor("white");
 
         time = Canvas.createIfSupported();
         if (time != null) {
@@ -59,7 +59,9 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             time.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent clickEvent) {
+                    if (isInsideCircle(clickEvent.getRelativeX(time.getElement()), clickEvent.getRelativeY(time.getElement()))){
                     circleSelectCallback.valueSelection(selection);
+                }
                 }
             });
             paint();
@@ -172,7 +174,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             int degrees = (selection * (360 / (numSlices / 2)));
             double rad = Math.toRadians(degrees) - (0.5 * Math.PI);
 
-            context.setStrokeStyle(TOP_BG);
+            context.setStrokeStyle(SELECTOR_COLOUR);
             context.beginPath();
             context.moveTo(circleX, circleY);
             double x = circleX + (Math.cos(rad) * (radian - 15));
@@ -182,7 +184,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             context.stroke();
 
             context.beginPath();
-            context.setFillStyle(TOP_BG);
+            context.setFillStyle(SELECTOR_COLOUR);
             context.arc(x, y, Math.sqrt(textWidth * textWidth + 15 * 15) / 2, 0, 2 * Math.PI, false);
             context.closePath();
             context.fill();

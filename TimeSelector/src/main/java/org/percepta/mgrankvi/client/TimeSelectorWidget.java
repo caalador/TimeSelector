@@ -38,7 +38,7 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
         selector = new TimeSelectorPopupWidget(this);
         SimplePanel baseContent = new SimplePanel();
         baseContent.add(content);
-        baseContent.getElement().getStyle().setBackgroundColor("white");
+//        baseContent.getElement().getStyle().setBackgroundColor("white");
         initWidget(baseContent);
         // CSS class-name should not be v- prefixed
         baseContent.setStyleName("c-" + CLASS_NAME);

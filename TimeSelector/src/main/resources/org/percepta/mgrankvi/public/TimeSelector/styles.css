@@ -6,9 +6,16 @@ div.TimeSelector {
     -ms-user-select: none;
 }
 
+.c-TimeSelector {
+    background-color: floralwhite;
+}
+
 .time-label {
     font-weight: bold;
     font-size: 21px;
+
+    padding: 0 10px;
+
 }
 
 .selector-popup-top {
@@ -17,6 +24,8 @@ div.TimeSelector {
 
 .selector-number {
     color: lightseagreen;
+    font-size: 40px;
+    font-weight: bold;
 }
 
 .selector-number.selected {
@@ -33,6 +42,21 @@ div.TimeSelector {
 
 .day-time.selected {
     color: lavender;
+}
+
+.c-TimeSelector-popup {
+    background-color: white;
+}
+
+.c-TimeSelector-popup .popupContent .gwt-Button {
+    border: none;
+    background: none;
+    padding: 5px;
+    color: mediumaquamarine;
+    font-size: 15px;
+    font-weight: 500;
+    margin-right: 15px;
+    cursor: pointer;
 }
 
 /*private String TOP_BG = "mediumaquamarine";*/
