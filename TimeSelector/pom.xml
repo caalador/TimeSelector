@@ -6,7 +6,7 @@
 	<artifactId>TimeSelector</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
-	<name>MyComponent Add-on</name>
+	<name>TimeSelector Add-on</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

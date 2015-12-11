@@ -6,7 +6,7 @@
 	<artifactId>TimeSelector-demo</artifactId>
 	<packaging>war</packaging>
 	<version>1.0</version>
-	<name>MyComponent Add-on Demo</name>
+	<name>TimeSelector Add-on Demo</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
