@@ -3,16 +3,20 @@ package org.percepta.mgrankvi.client.circle.select;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.TextMetrics;
+import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.TouchMoveEvent;
+import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.vaadin.client.VConsole;
 import org.percepta.mgrankvi.client.Number;
 
 import java.util.Arrays;
@@ -22,7 +26,7 @@ import java.util.List;
 /**
  * @author Mikael Grankvist - Vaadin }>
  */
-public class CircleSelect extends Composite implements MouseMoveHandler, MouseOutHandler {
+public class CircleSelect extends Composite implements MouseMoveHandler, MouseOutHandler, TouchMoveHandler, TouchEndHandler {
 
     private String SELECTOR_COLOUR = "mediumaquamarine";
 
@@ -48,7 +52,6 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         this.values.addAll(Arrays.asList(values));
 
         SimplePanel baseContent = new SimplePanel();
-//        baseContent.getElement().getStyle().setBackgroundColor("white");
 
         time = Canvas.createIfSupported();
         if (time != null) {
@@ -59,14 +62,16 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             time.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent clickEvent) {
-                    if (isInsideCircle(clickEvent.getRelativeX(time.getElement()), clickEvent.getRelativeY(time.getElement()))){
-                    circleSelectCallback.valueSelection(selection);
-                }
+                    if (isInsideCircle(clickEvent.getRelativeX(time.getElement()), clickEvent.getRelativeY(time.getElement()))) {
+                        circleSelectCallback.valueSelection(selection);
+                    }
                 }
             });
             paint();
             time.addDomHandler(this, MouseMoveEvent.getType());
             time.addDomHandler(this, MouseOutEvent.getType());
+            time.addDomHandler(this, TouchMoveEvent.getType());
+            time.addDomHandler(this, TouchEndEvent.getType());
         }
         initWidget(baseContent);
     }
@@ -96,6 +101,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
     /**
      * Set new major values to be painted in circle.
+     *
      * @param values Values to set in circle
      */
     public void setValues(Integer... values) {
@@ -117,11 +123,12 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
     }
 
     public void setSectors(int sectors) {
-        setSlices(sectors*2);
+        setSlices(sectors * 2);
     }
 
     /**
      * Set the selected time to show as selected
+     *
      * @param selection Selected time wanted
      */
     public void setSelection(int selection) {
@@ -164,7 +171,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                 double x = circleX + (Math.cos(rad) * (radian - 15)) - halfWidth;
                 double y = circleY + (Math.sin(rad) * (radian - 15)) + (context.measureText("W").getWidth() / 2);
 
-                numbers.add(new org.percepta.mgrankvi.client.Number(values.get(i-1), x, y));
+                numbers.add(new org.percepta.mgrankvi.client.Number(values.get(i - 1), x, y));
             }
         }
 
@@ -215,6 +222,10 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         int relativeX = event.getRelativeX(time.getElement());
         int relativeY = event.getRelativeY(time.getElement());
 
+        moveEvent(relativeX, relativeY);
+    }
+
+    private void moveEvent(int relativeX, int relativeY) {
         if (isInsideCircle(relativeX, relativeY)) {
             // + 0.5PI so we get 0 up top at 12 o'clock on the circle instead of 3 o'clock
             double theta = Math.atan2(relativeY - circleY, relativeX - circleX) + (Math.PI / 2);
@@ -237,13 +248,9 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                 }
             }
 
-            VConsole.log("in slice " + whichSlice + " - Theta: " + Math.toDegrees(theta));
-
             Integer number = (int) Math.ceil(whichSlice / 2);
             // Special case for 1-12 hour clock
             if (number == 0 && numSlices == 24) number = 12;
-            VConsole.log("Minute value: " + Math.ceil(Math.toDegrees(theta) / 6) % 60);
-            VConsole.log("Sector: " + format.format(number));
             selection = number;
 
             circleSelectCallback.valueHover(number);
@@ -268,6 +275,33 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         int relX = pointX - centerX;
         int relY = pointY - centerY;
         return relX * relX + relY * relY <= radius * radius;
+    }
+
+
+    @Override
+    public void onTouchEnd(TouchEndEvent event) {
+        if (touchEndX != null && touchEndY != null) {
+            circleSelectCallback.valueSelection(selection);
+        }
+    }
+
+    Integer touchEndX, touchEndY;
+
+    @Override
+    public void onTouchMove(TouchMoveEvent event) {
+        Touch touch = event.getTouches().get(0);
+        int relativeX = touch.getRelativeX(this.getElement());
+        int relativeY = touch.getRelativeY(this.getElement());
+
+        event.preventDefault();
+
+        moveEvent(relativeX, relativeY);
+        if (isInsideCircle(relativeX, relativeY)) {
+            touchEndX = relativeX;
+            touchEndY = relativeY;
+        } else {
+            touchEndX = touchEndY = null;
+        }
     }
 
 }
