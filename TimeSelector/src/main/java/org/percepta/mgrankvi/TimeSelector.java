@@ -39,6 +39,15 @@ public class TimeSelector extends com.vaadin.ui.AbstractComponent {
     }
 
     /**
+     * Set if the clock should be displayed in 24h format or AM/PM
+     * Note! hours will still be returned as 0 to 23
+     *
+     * @param twentyFour true - 24h format
+     */
+    public void setTwentyFour(boolean twentyFour) {
+        getState().twentyfour = twentyFour;
+    }
+    /**
      * Get hour selection.
      *
      * @return the selected hour (from 0 to 23)

@@ -38,11 +38,13 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
     private List<Number> numbers = new LinkedList<Number>();
     private List<Integer> values = new LinkedList<Integer>();
+    private List<Integer> innerValues = new LinkedList<Integer>();
 
     private int size = 250;
 
     private Integer selection = 12;
     private int numSlices = 24;
+    int halfWidth = 0;
 
     private final CircleSelectCallback circleSelectCallback;
 
@@ -101,13 +103,28 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
     /**
      * Set new major values to be painted in circle.
+     * NOTE! Setting values clears inner ring values!
      *
      * @param values Values to set in circle
      */
     public void setValues(Integer... values) {
         numbers.clear();
         this.values.clear();
+        this.innerValues.clear();
         this.values.addAll(Arrays.asList(values));
+        paint();
+    }
+
+    /**
+     * Set inner ring values.
+     * NOTE: Inner ring values will be cleared when setting values.
+     *
+     * @param values Values to set in the inner ring.
+     */
+    public void setInnerValues(Integer... values) {
+        numbers.clear();
+        this.innerValues.clear();
+        this.innerValues.addAll(Arrays.asList(values));
         paint();
     }
 
@@ -158,7 +175,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
         TextMetrics textMetrics = context.measureText("00");
         final int textWidth = (int) Math.ceil(textMetrics.getWidth());
-        int halfWidth = textWidth / 2;
+        halfWidth = textWidth / 2;
 
         // Init visible number positions
         if (numbers.isEmpty()) {
@@ -173,6 +190,17 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
                 numbers.add(new org.percepta.mgrankvi.client.Number(values.get(i - 1), x, y));
             }
+            if (!innerValues.isEmpty()) {
+                for (int i = 1; i <= innerValues.size(); i++) {
+                    int degrees = i * degreesPerStep;
+                    double rad = Math.toRadians(degrees) - (0.5 * Math.PI);
+
+                    double x = circleX + (Math.cos(rad) * (radian / 2)) - halfWidth;
+                    double y = circleY + (Math.sin(rad) * (radian / 2)) + (context.measureText("W").getWidth() / 2);
+
+                    numbers.add(new org.percepta.mgrankvi.client.Number(innerValues.get(i - 1), x, y));
+                }
+            }
         }
 
         if (selection != null) {
@@ -184,8 +212,12 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             context.setStrokeStyle(SELECTOR_COLOUR);
             context.beginPath();
             context.moveTo(circleX, circleY);
-            double x = circleX + (Math.cos(rad) * (radian - 15));
-            double y = circleY + (Math.sin(rad) * (radian - 15));
+            int radDistance = radian - 15;
+            if (!innerValues.isEmpty() && innerValues.contains(selection)) {
+                radDistance = radian / 2;
+            }
+            double x = circleX + (Math.cos(rad) * radDistance);
+            double y = circleY + (Math.sin(rad) * radDistance);
             context.lineTo(x, y);
             context.closePath();
             context.stroke();
@@ -251,6 +283,15 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             Integer number = (int) Math.ceil(whichSlice / 2);
             // Special case for 1-12 hour clock
             if (number == 0 && numSlices == 24) number = 12;
+
+            if (!innerValues.isEmpty()) {
+                Double distance = Math.sqrt(Math.pow(circleX - relativeX, 2) + Math.pow(circleY - relativeY, 2));
+                if (distance <= (radian / 2) + halfWidth) {
+                    // TODO: Check that inner values match in amount to sectors!
+                    number = innerValues.get(number - 1);
+                }
+            }
+
             selection = number;
 
             circleSelectCallback.valueHover(number);

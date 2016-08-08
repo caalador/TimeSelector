@@ -70,5 +70,9 @@ public class TimeSelectorConnector extends AbstractComponentConnector {
         getWidget().setHeight(getState().height);
     }
 
+    @OnStateChange("twentyfour")
+    void clockMode() {
+        getWidget().setClockMode(getState().twentyfour);
+    }
 
 }

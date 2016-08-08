@@ -62,4 +62,7 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
     }
 
 
+    public void setClockMode(boolean clockMode) {
+        selector.getClockMode(clockMode);
+    }
 }

@@ -9,6 +9,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.percepta.mgrankvi.TimeSelector;
@@ -30,6 +31,8 @@ public class DemoUI extends UI {
         }
     }
 
+    boolean twentyFour = true;
+
     @Override
     protected void init(VaadinRequest request) {
 
@@ -47,12 +50,28 @@ public class DemoUI extends UI {
         component.setTime(time.getHours(), time.getMinutes());
 
         // Show it in the middle of the screen
-        final VerticalLayout layout = new VerticalLayout();
-        layout.setStyleName("demoContentLayout");
-        layout.setSizeFull();
-        layout.addComponent(component);
-        layout.setComponentAlignment(component, Alignment.MIDDLE_CENTER);
-        setContent(layout);
+        final VerticalLayout contentLayout = new VerticalLayout();
+        contentLayout.setStyleName("demoContentLayout");
+        contentLayout.setSizeFull();
+        VerticalLayout content = new VerticalLayout();
+        content.setSizeUndefined();
+        content.setSpacing(true);
+        contentLayout.addComponent(content);
+        content.addComponent(new Button("am/pm", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                twentyFour = !twentyFour;
+                component.setTwentyFour(twentyFour);
+                if (twentyFour) {
+                    clickEvent.getButton().setCaption("Switch to am/pm");
+                } else {
+                    clickEvent.getButton().setCaption("Switch to twenty four");
+                }
+            }
+        }));
+        content.addComponent(component);
+        contentLayout.setComponentAlignment(content, Alignment.MIDDLE_CENTER);
+        setContent(contentLayout);
 
     }
 

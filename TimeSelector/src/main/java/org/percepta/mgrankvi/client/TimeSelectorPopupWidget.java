@@ -1,12 +1,10 @@
 package org.percepta.mgrankvi.client;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -22,6 +20,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     public static final String CLASS_NAME = "TimeSelector";
 
     private final SelectionHandler selectionHandler;
+    private boolean twentyFour = false;
 
     private enum Target {HOURS, MINUTES, AM, PM}
 
@@ -44,6 +43,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     private int minuteSelection = 0;
 
     CircleSelect clock;
+    VerticalPanel amToPm;
 
     public TimeSelectorPopupWidget(final SelectionHandler selectionHandler) {
         this.selectionHandler = selectionHandler;
@@ -92,7 +92,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         top.add(divider);
         top.add(minute);
 
-        VerticalPanel amToPm = new VerticalPanel();
+        amToPm = new VerticalPanel();
         amToPm.setWidth("55px");
         amToPm.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         amToPm.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -179,6 +179,8 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         minute.removeStyleName("selected");
 
         clock.setValues(getHourValues());
+        if (twentyFour)
+            clock.setInnerValues(new Integer[]{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24});
         clock.setSelection(hourSelection);
         clock.setSectors(12);
     }
@@ -193,8 +195,18 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         clock.setSectors(60);
     }
 
+    public void getClockMode(boolean clockMode) {
+        this.twentyFour = clockMode;
+        amToPm.setVisible(!twentyFour);
+        if (twentyFour)
+            top.setCellWidth(amToPm, "0px");
+        else
+            top.setCellWidth(amToPm, "55px");
+        setHours();
+    }
+
     private Integer[] getHourValues() {
-        if (half.equals(Target.PM)) {
+        if (half.equals(Target.PM) && !twentyFour) {
             return new Integer[]{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
         }
         return new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -260,7 +272,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     public void setTimeSelection(int hour, int minute) {
         hourSelection = hour;
         minuteSelection = minute;
-        if(hour > 12) {
+        if (hour > 12) {
             half = Target.PM;
             pm.addStyleName("selected");
             am.removeStyleName("selected");
@@ -272,6 +284,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         setTimeSelection();
         updateClock();
     }
+
     /*
      * Returns array with size in index 0 unit in index 1. Null or empty string
      * will produce Size(-1, "px");
