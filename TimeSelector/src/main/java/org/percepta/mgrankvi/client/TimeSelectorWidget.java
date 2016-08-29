@@ -18,6 +18,7 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
     Label content;
 
     TimeSelectorPopupWidget selector;
+    private boolean twentyFour = true;
 
     public TimeSelectorWidget() {
 
@@ -57,26 +58,30 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
 
     public void setTime(int hour, int minute) {
         NumberFormat formatter = NumberFormat.getFormat("00");
-        content.setText(formatter.format(hour) + ":" + formatter.format(minute));
+        content.setText(formatter.format(hour) + ":" + formatter.format(minute) + (twentyFour ? "" : " " + selector.getHalf()));
         selector.setTimeSelection(hour, minute);
     }
 
     /**
      * Set clock to 24h or 12h mode
+     *
      * @param twentyFour true for 24h mode
      */
     public void setClockMode(boolean twentyFour) {
+        this.twentyFour = twentyFour;
         selector.setClockMode(twentyFour);
-        if(!twentyFour){
-            if(selector.getHourSelection() > 12) {
+        if (!twentyFour) {
+            if (selector.getHourSelection() > 12) {
                 setTime(selector.getHourSelection() - 12, selector.getMinuteSelection());
                 selector.setHalf(TimeSelectorPopupWidget.Target.PM);
-            }else{
+            } else {
                 setTime(selector.getHourSelection(), selector.getMinuteSelection());
                 selector.setHalf(TimeSelectorPopupWidget.Target.AM);
             }
-        } else if(selector.getHalf().equals(TimeSelectorPopupWidget.Target.PM) && selector.getHourSelection() != 0) {
-            setTime(selector.getHourSelection()+12, selector.getMinuteSelection());
+        } else if (selector.getHalf().equals(TimeSelectorPopupWidget.Target.PM) && selector.getHourSelection() != 0) {
+            setTime(selector.getHourSelection() + 12, selector.getMinuteSelection());
+        } else {
+            setTime(selector.getHourSelection(), selector.getMinuteSelection());
         }
     }
 }
