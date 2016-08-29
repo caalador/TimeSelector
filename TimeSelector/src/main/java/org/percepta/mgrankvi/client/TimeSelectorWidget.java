@@ -61,8 +61,22 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
         selector.setTimeSelection(hour, minute);
     }
 
-
-    public void setClockMode(boolean clockMode) {
-        selector.getClockMode(clockMode);
+    /**
+     * Set clock to 24h or 12h mode
+     * @param twentyFour true for 24h mode
+     */
+    public void setClockMode(boolean twentyFour) {
+        selector.setClockMode(twentyFour);
+        if(!twentyFour){
+            if(selector.getHourSelection() > 12) {
+                setTime(selector.getHourSelection() - 12, selector.getMinuteSelection());
+                selector.setHalf(TimeSelectorPopupWidget.Target.PM);
+            }else{
+                setTime(selector.getHourSelection(), selector.getMinuteSelection());
+                selector.setHalf(TimeSelectorPopupWidget.Target.AM);
+            }
+        } else if(selector.getHalf().equals(TimeSelectorPopupWidget.Target.PM) && selector.getHourSelection() != 0) {
+            setTime(selector.getHourSelection()+12, selector.getMinuteSelection());
+        }
     }
 }

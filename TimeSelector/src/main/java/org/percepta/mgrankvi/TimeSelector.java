@@ -1,16 +1,22 @@
 package org.percepta.mgrankvi;
 
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.CustomField;
 import org.percepta.mgrankvi.client.TimeSelectorClientRpc;
 import org.percepta.mgrankvi.client.TimeSelectorServerRpc;
 import org.percepta.mgrankvi.client.TimeSelectorState;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 // This is the server-side UI component that provides public API 
 // for MyComponent
-public class TimeSelector extends com.vaadin.ui.AbstractComponent {
+public class TimeSelector extends CustomField<Date> {
 
     int hour = 0;
     int minute = 0;
@@ -22,6 +28,10 @@ public class TimeSelector extends com.vaadin.ui.AbstractComponent {
         public void valueSelection(int hours, int minutes) {
             hour = hours;
             minute = minutes;
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, hours);
+            cal.set(Calendar.MINUTE, minutes);
+            setValue(cal.getTime());
             fireChangeEvent(hours, minutes);
         }
     };
@@ -30,6 +40,16 @@ public class TimeSelector extends com.vaadin.ui.AbstractComponent {
 
         // To receive events from the client, we register ServerRpc
         registerRpc(rpc);
+    }
+
+    @Override
+    public Class<? extends Date> getType() {
+        return Date.class;
+    }
+
+    @Override
+    protected Component initContent() {
+        return new CssLayout();
     }
 
     // We must override getState() to cast the state to MyComponentState
@@ -53,7 +73,7 @@ public class TimeSelector extends com.vaadin.ui.AbstractComponent {
      * @return the selected hour (from 0 to 23)
      */
     public int getHours() {
-        return hour;
+        return getValue().getHours();
     }
 
     /**
@@ -62,7 +82,7 @@ public class TimeSelector extends com.vaadin.ui.AbstractComponent {
      * @return the currently selected minute (from 0 to 59)
      */
     public int getMinutes() {
-        return minute;
+        return getValue().getMinutes();
     }
 
     /**
@@ -73,6 +93,12 @@ public class TimeSelector extends com.vaadin.ui.AbstractComponent {
      */
     public void setTime(int hour, int minute) {
         getRpcProxy(TimeSelectorClientRpc.class).setTime(hour, minute);
+    }
+
+    @Override
+    public void setValue(Date newFieldValue) throws ReadOnlyException, Converter.ConversionException {
+        super.setValue(newFieldValue);
+        setTime(newFieldValue.getHours(), newFieldValue.getMinutes());
     }
 
     private static final Method SELECTION_EVENT;

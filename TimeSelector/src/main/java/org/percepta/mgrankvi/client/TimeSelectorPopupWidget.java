@@ -22,7 +22,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     private final SelectionHandler selectionHandler;
     private boolean twentyFour = false;
 
-    private enum Target {HOURS, MINUTES, AM, PM}
+    protected enum Target {HOURS, MINUTES, AM, PM}
 
     private NumberFormat format = NumberFormat.getFormat("00");
 
@@ -102,10 +102,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         am.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
-                if (half.equals(Target.PM)) {
-                    hourSelection -= 12;
-                    setTimeSelection();
-                }
                 half = Target.AM;
                 am.addStyleName("selected");
                 pm.removeStyleName("selected");
@@ -118,10 +114,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         pm.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
-                if (half.equals(Target.AM)) {
-                    hourSelection += 12;
-                    setTimeSelection();
-                }
                 half = Target.PM;
                 pm.addStyleName("selected");
                 am.removeStyleName("selected");
@@ -180,7 +172,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
 
         clock.setValues(getHourValues());
         if (twentyFour)
-            clock.setInnerValues(new Integer[]{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24});
+            clock.setInnerValues(new Integer[]{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 00});
         clock.setSelection(hourSelection);
         clock.setSectors(12);
     }
@@ -190,15 +182,15 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         minute.addStyleName("selected");
         hour.removeStyleName("selected");
 
-        clock.setValues(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60);
+        clock.setValues(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 00);
         clock.setSelection(minuteSelection);
         clock.setSectors(60);
     }
 
-    public void getClockMode(boolean clockMode) {
-        this.twentyFour = clockMode;
-        amToPm.setVisible(!twentyFour);
-        if (twentyFour)
+    public void setClockMode(boolean twentyFour) {
+        this.twentyFour = twentyFour;
+        amToPm.setVisible(!this.twentyFour);
+        if (this.twentyFour)
             top.setCellWidth(amToPm, "0px");
         else
             top.setCellWidth(amToPm, "55px");
@@ -206,9 +198,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     }
 
     private Integer[] getHourValues() {
-        if (half.equals(Target.PM) && !twentyFour) {
-            return new Integer[]{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
-        }
         return new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     }
 
@@ -226,9 +215,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     @Override
     public void valueSelection(Integer timeValue) {
         if (select.equals(Target.HOURS)) {
-            if (half.equals(Target.PM)) {
-                timeValue += 12;
-            }
             hourSelection = timeValue;
             hour.setText(format.format(timeValue));
             setMinuteSelection();
@@ -241,9 +227,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     @Override
     public void valueHover(Integer timeValue) {
         if (select.equals(Target.HOURS)) {
-            if (half.equals(Target.PM)) {
-                timeValue += 12;
-            }
             hour.setText(format.format(timeValue));
         } else {
             minute.setText(format.format(timeValue % 60));
@@ -272,17 +255,31 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     public void setTimeSelection(int hour, int minute) {
         hourSelection = hour;
         minuteSelection = minute;
-        if (hour > 12) {
-            half = Target.PM;
+        setTimeSelection();
+        updateClock();
+    }
+
+    public Target getHalf() {
+        return half;
+    }
+
+    public void setHalf(Target half) {
+        this.half = half;
+        if (half.equals(Target.PM)) {
             pm.addStyleName("selected");
             am.removeStyleName("selected");
         } else {
-            half = Target.AM;
             am.addStyleName("selected");
             pm.removeStyleName("selected");
         }
-        setTimeSelection();
-        updateClock();
+    }
+
+    public int getHourSelection() {
+        return hourSelection;
+    }
+
+    public int getMinuteSelection() {
+        return minuteSelection;
     }
 
     /*

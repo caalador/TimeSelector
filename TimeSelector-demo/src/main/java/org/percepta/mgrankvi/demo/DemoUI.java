@@ -46,8 +46,7 @@ public class DemoUI extends UI {
             }
         });
 
-        Date time = new Date();
-        component.setTime(time.getHours(), time.getMinutes());
+        component.setValue(new Date());
 
         // Show it in the middle of the screen
         final VerticalLayout contentLayout = new VerticalLayout();
