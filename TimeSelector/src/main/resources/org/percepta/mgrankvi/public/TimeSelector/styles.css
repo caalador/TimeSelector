@@ -46,6 +46,7 @@ div.TimeSelector {
 
 .c-TimeSelector-popup {
     background-color: white;
+    z-index: 100;
 }
 
 .c-TimeSelector-popup .popupContent .gwt-Button {
