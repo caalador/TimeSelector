@@ -84,4 +84,12 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
             setTime(selector.getHourSelection(), selector.getMinuteSelection());
         }
     }
+
+    public void setVisibleMinutes(Integer[] visibleMinutes) {
+        selector.setVisibleMinutes(visibleMinutes);
+    }
+
+    public void setMinuteSectors(int minuteSectors) {
+        selector.setMinuteSectors(minuteSectors);
+    }
 }

@@ -47,6 +47,8 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
     int halfWidth = 0;
 
     private final CircleSelectCallback circleSelectCallback;
+    private int sectors = 12;
+    private Integer value = 12;
 
 
     public CircleSelect(final CircleSelectCallback circleSelectCallback, int size, Integer... values) {
@@ -65,7 +67,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                 @Override
                 public void onClick(ClickEvent clickEvent) {
                     if (isInsideCircle(clickEvent.getRelativeX(time.getElement()), clickEvent.getRelativeY(time.getElement()))) {
-                        circleSelectCallback.valueSelection(selection);
+                        circleSelectCallback.valueSelection(value);
                     }
                 }
             });
@@ -108,11 +110,27 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
      * @param values Values to set in circle
      */
     public void setValues(Integer... values) {
+        clearNumberAndValueLists();
+        this.values.addAll(Arrays.asList(values));
+        paint();
+    }
+
+    /**
+     * Set new major values to be painted in circle.
+     * NOTE! Setting values clears inner ring values!
+     *
+     * @param values Values to set in circle
+     */
+    public void setValues(List<Integer> values) {
+        clearNumberAndValueLists();
+        this.values.addAll(values);
+        paint();
+    }
+
+    private void clearNumberAndValueLists() {
         numbers.clear();
         this.values.clear();
         this.innerValues.clear();
-        this.values.addAll(Arrays.asList(values));
-        paint();
     }
 
     /**
@@ -140,6 +158,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
     }
 
     public void setSectors(int sectors) {
+        this.sectors = sectors;
         setSlices(sectors * 2);
     }
 
@@ -282,19 +301,23 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
 
             Integer number = (int) Math.ceil(whichSlice / 2);
             // Special case for 1-12 hour clock
-            if (number == 0 && numSlices == 24) number = 12;
+//            if (number == 0 && numSlices == 24) number = 12;
+            if (number == 0) number = sectors;
 
-            if (!innerValues.isEmpty()) {
-                Double distance = Math.sqrt(Math.pow(circleX - relativeX, 2) + Math.pow(circleY - relativeY, 2));
-                if (distance <= (radian / 2) + halfWidth) {
-                    // TODO: Check that inner values match in amount to sectors!
+            Double distance = Math.sqrt(Math.pow(circleX - relativeX, 2) + Math.pow(circleY - relativeY, 2));
+            if (!innerValues.isEmpty() && innerValues.size() == sectors && distance <= (radian / 2) + halfWidth) {
                     number = innerValues.get(number - 1);
-                }
+                    value = number;
+            } else if (sectors == values.size()) {
+                // If we have as many values as sectors use the value for number.
+                value = values.get(number - 1);
+            } else {
+                value = number;
             }
 
             selection = number;
 
-            circleSelectCallback.valueHover(number);
+            circleSelectCallback.valueHover(value);
         } else {
             circleSelectCallback.mouseOutEvent();
         }
@@ -322,7 +345,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
     @Override
     public void onTouchEnd(TouchEndEvent event) {
         if (touchEndX != null && touchEndY != null) {
-            circleSelectCallback.valueSelection(selection);
+            circleSelectCallback.valueSelection(value);
         }
     }
 

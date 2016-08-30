@@ -15,12 +15,17 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import org.percepta.mgrankvi.client.circle.select.CircleSelect;
 import org.percepta.mgrankvi.client.circle.select.CircleSelectCallback;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements CircleSelectCallback {
 
     public static final String CLASS_NAME = "TimeSelector";
 
     private final SelectionHandler selectionHandler;
     private boolean twentyFour = false;
+    private int minuteSectors;
+    private Integer[] visibleMinutes;
 
     protected enum Target {HOURS, MINUTES, AM, PM}
 
@@ -161,6 +166,14 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         content.setCellHorizontalAlignment(control, HasHorizontalAlignment.ALIGN_RIGHT);
     }
 
+    public void setMinuteSectors(int minuteSectors) {
+        this.minuteSectors = minuteSectors;
+    }
+
+    public void setVisibleMinutes(Integer[] visibleMinutes) {
+        this.visibleMinutes = visibleMinutes;
+    }
+
     private void setHourSelection() {
         setHours();
         select = Target.HOURS;
@@ -182,9 +195,14 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         minute.addStyleName("selected");
         hour.removeStyleName("selected");
 
-        clock.setValues(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 00);
-        clock.setSelection(minuteSelection);
-        clock.setSectors(60);
+        List<Integer> visibleList = Arrays.asList(visibleMinutes);
+        clock.setValues(visibleList);
+        if (visibleList.contains(minuteSelection) && visibleList.size() == minuteSectors) {
+            clock.setSelection(visibleList.indexOf(minuteSelection) + 1);
+        } else {
+            clock.setSelection(minuteSelection);
+        }
+        clock.setSectors(minuteSectors);
     }
 
     public void setClockMode(boolean twentyFour) {

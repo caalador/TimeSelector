@@ -75,4 +75,13 @@ public class TimeSelectorConnector extends AbstractComponentConnector {
         getWidget().setClockMode(getState().twentyfour);
     }
 
+    @OnStateChange("visibleMinutes")
+    void setVisibleMinutes() {
+        getWidget().setVisibleMinutes(getState().visibleMinutes);
+    }
+
+    @OnStateChange("minuteSectors")
+    void setMinuteSectors() {
+        getWidget().setMinuteSectors(getState().minuteSectors);
+    }
 }

@@ -67,6 +67,7 @@ public class TimeSelector extends CustomField<Date> {
     public void setTwentyFour(boolean twentyFour) {
         getState().twentyfour = twentyFour;
     }
+
     /**
      * Get hour selection.
      *
@@ -83,6 +84,14 @@ public class TimeSelector extends CustomField<Date> {
      */
     public int getMinutes() {
         return getValue().getMinutes();
+    }
+
+    public void setMinuteCaptions(Integer... minuteLabels) {
+        getState().visibleMinutes = minuteLabels;
+    }
+
+    public void setMinuteSectors(int sectors) {
+        getState().minuteSectors = sectors;
     }
 
     /**

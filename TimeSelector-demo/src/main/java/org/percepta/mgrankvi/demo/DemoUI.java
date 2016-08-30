@@ -68,6 +68,20 @@ public class DemoUI extends UI {
                 }
             }
         }));
+        content.addComponent(new Button("Restrict minutes", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                if(clickEvent.getButton().getCaption().equals("Restrict minutes")) {
+                    component.setMinuteCaptions(15, 30, 45, 00);
+                    component.setMinuteSectors(4);
+                    clickEvent.getButton().setCaption("Unrestrict minutes");
+                } else {
+                    component.setMinuteCaptions(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 00);
+                    component.setMinuteSectors(60);
+                    clickEvent.getButton().setCaption("Restrict minutes");
+                }
+            }
+        }));
         content.addComponent(component);
         contentLayout.setComponentAlignment(content, Alignment.MIDDLE_CENTER);
         setContent(contentLayout);
