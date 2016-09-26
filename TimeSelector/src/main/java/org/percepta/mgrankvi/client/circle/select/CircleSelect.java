@@ -189,6 +189,11 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
         context.closePath();
         context.stroke();
 
+        context.setFillStyle("white");
+        context.beginPath();
+        context.arc(circleX, circleY, radian, 0, 2 * Math.PI, false);
+        context.closePath();
+        context.fill();
 
         context.setFont("bold 15px Courier New");
 
