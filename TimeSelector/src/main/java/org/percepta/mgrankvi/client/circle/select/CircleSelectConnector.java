@@ -75,5 +75,8 @@ public class CircleSelectConnector extends AbstractComponentConnector {
         if (getState().innerValues != null) {
             getWidget().setInnerValues(getState().innerValues);
         }
+        if(getState().currentValue != null) {
+            getWidget().setSelection(getState().currentValue);
+        }
     }
 }

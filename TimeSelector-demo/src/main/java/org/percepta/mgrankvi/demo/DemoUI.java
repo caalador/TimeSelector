@@ -109,6 +109,7 @@ public class DemoUI extends UI {
         final CircleSelect minutes = new CircleSelect();
         minutes.setSectors(60);
         minutes.setVisibleValues(5,10,15,20,25,30,35,40,45,50,55,0);
+        minutes.setValue(17);
         minutes.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
@@ -122,6 +123,7 @@ public class DemoUI extends UI {
         fullDay.setSectors(12);
         fullDay.setVisibleValues(1,2,3,4,5,6,7,8,9,10,11,0);
         fullDay.setInnerValues(13,14,15,16,17,18,19,20,21,22,23,24);
+        fullDay.setValue(18);
         fullDay.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {

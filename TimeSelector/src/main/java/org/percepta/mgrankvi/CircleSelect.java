@@ -1,5 +1,7 @@
 package org.percepta.mgrankvi;
 
+import com.vaadin.data.Property;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.event.ConnectorEventListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -81,7 +83,11 @@ public class CircleSelect extends CustomField<Integer> {
         getState().innerValues = null;
     }
 
-
+    @Override
+    public void setValue(Integer newFieldValue) throws ReadOnlyException, Converter.ConversionException {
+        super.setValue(newFieldValue);
+        getState().currentValue = newFieldValue;
+    }
 
     public interface HoverEventListener extends ConnectorEventListener {
 
