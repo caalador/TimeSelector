@@ -1,4 +1,4 @@
-package org.percepta.mgrankvi.client;
+package org.percepta.mgrankvi.client.popup;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -12,6 +12,9 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.percepta.mgrankvi.client.SelectionHandler;
+import org.percepta.mgrankvi.client.Size;
+import org.percepta.mgrankvi.client.Target;
 import org.percepta.mgrankvi.client.circle.select.CircleSelect;
 import org.percepta.mgrankvi.client.circle.select.CircleSelectCallback;
 
@@ -26,8 +29,6 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     private boolean twentyFour = false;
     private int minuteSectors;
     private Integer[] visibleMinutes;
-
-    protected enum Target {HOURS, MINUTES, AM, PM}
 
     private NumberFormat format = NumberFormat.getFormat("00");
 
@@ -220,12 +221,12 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
     }
 
     // Set width for time selection component
-    public void setWidths(String width) {
+    public void setWidth(String width) {
         content.setWidth(width);
         this.width = parseStringSize(width).size;
     }
 
-    public void setHeights(String height) {
+    public void setHeight(String height) {
         content.setHeight(height);
         this.height = parseStringSize(height).size;
     }
@@ -350,5 +351,8 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         return size;
     }
 
+    public void setClockSize(int size) {
+        clock.setSize(size);
+    }
 
 }

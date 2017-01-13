@@ -1,4 +1,4 @@
-package org.percepta.mgrankvi.client;
+package org.percepta.mgrankvi.client.popup;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -8,8 +8,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import org.percepta.mgrankvi.client.SelectionHandler;
+import org.percepta.mgrankvi.client.Target;
 
-public class TimeSelectorWidget extends Composite implements SelectionHandler {//} implements CircleSelectCallback {
+public class TimeSelectorWidget extends Composite implements SelectionHandler {
 
     public static final String CLASS_NAME = "TimeSelector";
 
@@ -21,7 +23,6 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
     private boolean twentyFour = true;
 
     public TimeSelectorWidget() {
-
         content = new Label("12:00");
         content.setStyleName("time-label");
         content.addClickHandler(new ClickHandler() {
@@ -39,7 +40,6 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
         selector = new TimeSelectorPopupWidget(this);
         SimplePanel baseContent = new SimplePanel();
         baseContent.add(content);
-//        baseContent.getElement().getStyle().setBackgroundColor("white");
         initWidget(baseContent);
         // CSS class-name should not be v- prefixed
         baseContent.setStyleName("c-" + CLASS_NAME);
@@ -73,16 +73,20 @@ public class TimeSelectorWidget extends Composite implements SelectionHandler {/
         if (!twentyFour) {
             if (selector.getHourSelection() > 12) {
                 setTime(selector.getHourSelection() - 12, selector.getMinuteSelection());
-                selector.setHalf(TimeSelectorPopupWidget.Target.PM);
+                selector.setHalf(Target.PM);
             } else {
                 setTime(selector.getHourSelection(), selector.getMinuteSelection());
-                selector.setHalf(TimeSelectorPopupWidget.Target.AM);
+                selector.setHalf(Target.AM);
             }
-        } else if (selector.getHalf().equals(TimeSelectorPopupWidget.Target.PM) && selector.getHourSelection() != 0) {
+        } else if (selector.getHalf().equals(Target.PM) && selector.getHourSelection() != 0) {
             setTime(selector.getHourSelection() + 12, selector.getMinuteSelection());
         } else {
             setTime(selector.getHourSelection(), selector.getMinuteSelection());
         }
+    }
+
+    public void setClockSize(int size) {
+        selector.setClockSize(size);
     }
 
     public void setVisibleMinutes(Integer[] visibleMinutes) {

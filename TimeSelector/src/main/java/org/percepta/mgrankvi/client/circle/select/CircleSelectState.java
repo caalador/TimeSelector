@@ -11,4 +11,5 @@ public class CircleSelectState extends AbstractFieldState {
     public Integer[] innerValues = null;
     public int sectors = 12;
     public Integer currentValue = null;
+    public Integer size = 250;
 }

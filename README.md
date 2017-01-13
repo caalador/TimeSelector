@@ -1,6 +1,6 @@
-# MyComponent Add-on for Vaadin 7
+# TimeSelector Add-on for Vaadin 7
 
-MyComponent is an UI component add-on for Vaadin 7.
+TimeSelector is an UI component add-on for Vaadin 7.
 
 ## Online demo
 
@@ -8,7 +8,7 @@ Try the add-on demo at <url of the online demo>
 
 ## Download release
 
-Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to http://vaadin.com/addon/TimeSelector
+Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to https://vaadin.com/directory#!addon/timeselector-add-on
 
 ## Building and running demo
 
@@ -17,7 +17,7 @@ mvn clean install
 cd demo
 mvn jetty:run
 
-To see the demo, navigate to http://localhost:8080/
+To see the demo, navigate to http://mikael2.virtuallypreinstalled.com/TimeSelector/
 
 ## Development with Eclipse IDE
 

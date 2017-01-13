@@ -1,9 +1,6 @@
-package org.percepta.mgrankvi.client;
+package org.percepta.mgrankvi.client.popup;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.RpcProxy;
@@ -11,6 +8,7 @@ import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import org.percepta.mgrankvi.TimeSelector;
+import org.percepta.mgrankvi.client.*;
 
 // Connector binds client-side widget class to server-side component class
 // Connector lives in the client and the @Connect annotation specifies the
@@ -33,7 +31,6 @@ public class TimeSelectorConnector extends AbstractComponentConnector {
         });
 
         getWidget().addSelectionHandler(new SelectionHandler(){
-
             @Override
             public void timeSelection(int hour, int minute) {
                 rpc.valueSelection(hour, minute);
@@ -41,32 +38,33 @@ public class TimeSelectorConnector extends AbstractComponentConnector {
         });
     }
 
-    // We must implement createWidget() to create correct type of widget
     @Override
     protected Widget createWidget() {
         return GWT.create(TimeSelectorWidget.class);
     }
 
-
-    // We must implement getWidget() to cast to correct type
     @Override
     public TimeSelectorWidget getWidget() {
         return (TimeSelectorWidget) super.getWidget();
     }
 
-    // We must implement getState() to cast to correct type
     @Override
     public TimeSelectorState getState() {
         return (TimeSelectorState) super.getState();
     }
 
-    // Whenever the state changes in the server-side, this method is called
     @Override
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
         super.onStateChanged(stateChangeEvent);
+    }
 
-        // State is directly readable in the client after it is set in server
+    @OnStateChange("width")
+    void setWidth() {
         getWidget().setWidth(getState().width);
+    }
+
+    @OnStateChange("height")
+    void setHeight() {
         getWidget().setHeight(getState().height);
     }
 

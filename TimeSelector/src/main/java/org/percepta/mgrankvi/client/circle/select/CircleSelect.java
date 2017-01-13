@@ -17,7 +17,6 @@ import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
-import org.percepta.mgrankvi.client.Number;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -212,7 +211,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                 double x = circleX + (Math.cos(rad) * (radian - 15)) - halfWidth;
                 double y = circleY + (Math.sin(rad) * (radian - 15)) + (context.measureText("W").getWidth() / 2);
 
-                numbers.add(new org.percepta.mgrankvi.client.Number(values.get(i - 1), x, y));
+                numbers.add(new Number(values.get(i - 1), x, y));
             }
             if (!innerValues.isEmpty()) {
                 for (int i = 1; i <= innerValues.size(); i++) {
@@ -222,7 +221,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                     double x = circleX + (Math.cos(rad) * (radian / 2)) - halfWidth;
                     double y = circleY + (Math.sin(rad) * (radian / 2)) + (context.measureText("W").getWidth() / 2);
 
-                    numbers.add(new org.percepta.mgrankvi.client.Number(innerValues.get(i - 1), x, y));
+                    numbers.add(new Number(innerValues.get(i - 1), x, y));
                 }
             }
         }

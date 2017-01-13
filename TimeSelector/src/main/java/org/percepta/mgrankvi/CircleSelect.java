@@ -1,6 +1,5 @@
 package org.percepta.mgrankvi;
 
-import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.event.ConnectorEventListener;
 import com.vaadin.ui.Component;
@@ -81,6 +80,13 @@ public class CircleSelect extends CustomField<Integer> {
      */
     public void clearInnerValues() {
         getState().innerValues = null;
+    }
+
+    /**
+     * Sets the canvas size.
+     */
+    public void setSize(Integer size) {
+        getState().size = size;
     }
 
     @Override
