@@ -89,6 +89,14 @@ public class CircleSelect extends CustomField<Integer> {
         getState().size = size;
     }
 
+    public void setSelectorColor(String color) {
+        getState().selectorColor = color;
+    }
+
+    public void setFillColor(String color) {
+        getState().fillColor = color;
+    }
+
     @Override
     public void setValue(Integer newFieldValue) throws ReadOnlyException, Converter.ConversionException {
         super.setValue(newFieldValue);

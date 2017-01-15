@@ -3,7 +3,6 @@ package org.percepta.mgrankvi.client.circle.select;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.RpcProxy;
-import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 
@@ -50,7 +49,7 @@ public class CircleSelectConnector extends AbstractComponentConnector {
 
     @Override
     protected Widget createWidget() {
-        return new CircleSelect(callback, getState().size, getState().values);
+        return new CircleSelect(getState().size, callback, getState().values);
     }
 
     @Override
@@ -66,6 +65,18 @@ public class CircleSelectConnector extends AbstractComponentConnector {
     @OnStateChange("size")
     void sizeChanged() {
         getWidget().setSize(getState().size);
+        getWidget().refresh();
+    }
+
+    @OnStateChange("selectorColor")
+    void selectorColorChanged() {
+        getWidget().setSelectorColor(getState().selectorColor);
+        getWidget().refresh();
+    }
+
+    @OnStateChange("fillColor")
+    void fillColorChanged() {
+        getWidget().setFillColor(getState().fillColor);
         getWidget().refresh();
     }
 

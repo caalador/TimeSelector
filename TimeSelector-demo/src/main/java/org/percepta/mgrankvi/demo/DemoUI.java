@@ -111,6 +111,8 @@ public class DemoUI extends UI {
         smallEmbed.setWidth(250, Unit.PIXELS);
         smallEmbed.setHeight(250, Unit.PIXELS);
         smallEmbed.setClockSize(150);
+        smallEmbed.setSelectorColor("red");
+        smallEmbed.setFillColor("blue");
         smallEmbed.setTimeFormat(false);
         Button smlOkButton = new Button("Get Time");
         smlOkButton.addClickListener(new Button.ClickListener() {
@@ -149,7 +151,6 @@ public class DemoUI extends UI {
         circles.setCaption("CircleSelect as freestanding component");
 
         final CircleSelect defaultCircle = new CircleSelect();
-        defaultCircle.setSize(150);
         defaultCircle.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {

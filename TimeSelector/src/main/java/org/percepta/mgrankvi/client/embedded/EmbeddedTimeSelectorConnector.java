@@ -49,7 +49,7 @@ public class EmbeddedTimeSelectorConnector extends AbstractComponentConnector im
 
     @Override
     protected Widget createWidget() {
-        return new TimeSelectorEmbeddedWidget(getState().clockSize);
+        return new TimeSelectorEmbeddedWidget(getState().fillColor, getState().selectorColor, getState().clockSize);
     }
 
     @Override
@@ -105,6 +105,16 @@ public class EmbeddedTimeSelectorConnector extends AbstractComponentConnector im
     @OnStateChange("selectedMinute")
     void setMinutes() {
         getWidget().setMinuteSelection(getState().selectedMinute);
+    }
+
+    @OnStateChange("selectorColor")
+    void setSelectorColor() {
+        getWidget().setSelectorColor(getState().selectorColor);
+    }
+
+    @OnStateChange("fillColor")
+    void setFillColor() {
+        getWidget().setFillColor(getState().fillColor);
     }
 
     @Override

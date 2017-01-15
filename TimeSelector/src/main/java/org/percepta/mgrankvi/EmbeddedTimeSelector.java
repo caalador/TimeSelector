@@ -39,6 +39,14 @@ public class EmbeddedTimeSelector extends AbstractComponent {
         getRpcProxy(TimeSelectorClientRpc.class).setHourAndMinute(hour, minute);
     }
 
+    public void setSelectorColor(String color) {
+        getState().selectorColor = color;
+    }
+
+    public void setFillColor(String color) {
+        getState().fillColor = color;
+    }
+
     public void setHalf(Target target) {
         getRpcProxy(TimeSelectorClientRpc.class).setHalf(target);
     }

@@ -28,6 +28,7 @@ import java.util.List;
 public class CircleSelect extends Composite implements MouseMoveHandler, MouseOutHandler, TouchMoveHandler, TouchEndHandler {
 
     private String SELECTOR_COLOUR = "mediumaquamarine";
+    private String OTHER_COLOUR = "seagreen";
 
     private final Canvas time;
 
@@ -49,8 +50,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
     private int sectors = 12;
     private Integer value = 12;
 
-
-    public CircleSelect(final CircleSelectCallback circleSelectCallback, int size, Integer... values) {
+    public CircleSelect(int size, final CircleSelectCallback circleSelectCallback, Integer...values) {
         this.circleSelectCallback = circleSelectCallback;
         this.values.addAll(Arrays.asList(values));
 
@@ -77,6 +77,24 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             time.addDomHandler(this, TouchEndEvent.getType());
         }
         initWidget(baseContent);
+    }
+
+    public CircleSelect(String fillColor, String selectorColor, int size, final CircleSelectCallback callback, Integer...values) {
+        this(size, callback, values);
+        SELECTOR_COLOUR = selectorColor;
+        OTHER_COLOUR = fillColor;
+    }
+
+    public void setSelectorColor(String color) {
+        this.SELECTOR_COLOUR = color;
+        clearCanvas();
+        refresh();
+    }
+
+    public void setFillColor(String color) {
+        this.OTHER_COLOUR = color;
+        clearCanvas();
+        refresh();
     }
 
     /**
@@ -252,7 +270,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             context.fill();
 
             context.beginPath();
-            context.setFillStyle("seagreen");
+            context.setFillStyle(OTHER_COLOUR);
             context.arc(x, y, 2, 0, 2 * Math.PI, false);
             context.closePath();
             context.fill();

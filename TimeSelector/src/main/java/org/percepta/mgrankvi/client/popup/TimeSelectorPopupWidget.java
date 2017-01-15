@@ -136,7 +136,7 @@ public class TimeSelectorPopupWidget extends DecoratedPopupPanel implements Circ
         top.add(amToPm);
         top.setCellWidth(amToPm, "55px");
 
-        clock = new CircleSelect(this, 250, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+        clock = new CircleSelect(250, this, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         content.add(clock);
 
         HorizontalPanel control = new HorizontalPanel();

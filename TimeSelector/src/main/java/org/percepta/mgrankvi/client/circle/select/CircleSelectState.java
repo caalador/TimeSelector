@@ -12,4 +12,6 @@ public class CircleSelectState extends AbstractFieldState {
     public int sectors = 12;
     public Integer currentValue = null;
     public Integer size = 250;
+    public String selectorColor = "mediumaquamarine";
+    public String fillColor = "seagreen";
 }

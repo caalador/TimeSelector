@@ -39,7 +39,7 @@ public class TimeSelectorEmbeddedWidget extends SimpleLayoutPanel implements Cir
     private CircleSelect clock;
     private VerticalPanel amToPm;
 
-    public TimeSelectorEmbeddedWidget(int clockSize) {
+    public TimeSelectorEmbeddedWidget(String fillColor, String selectorColor, int clockSize) {
         VerticalPanel content = new VerticalPanel();
         content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
@@ -55,7 +55,7 @@ public class TimeSelectorEmbeddedWidget extends SimpleLayoutPanel implements Cir
         createDigitalClockView();
         createAmPmSwitch();
 
-        clock = new CircleSelect(this, clockSize, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+        clock = new CircleSelect(fillColor, selectorColor, clockSize, this, hourValues);
 
         content.add(topPanel);
         content.add(clock);
@@ -240,5 +240,13 @@ public class TimeSelectorEmbeddedWidget extends SimpleLayoutPanel implements Cir
 
     public void setMinuteSelection(int minutes) {
         minuteSelection = minutes;
+    }
+
+    public void setSelectorColor(String color) {
+        clock.setSelectorColor(color);
+    }
+
+    public void setFillColor(String color) {
+        clock.setFillColor(color);
     }
 }
