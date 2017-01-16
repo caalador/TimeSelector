@@ -16,7 +16,7 @@ import org.percepta.mgrankvi.client.Target;
 import java.util.List;
 
 @Connect(EmbeddedTimeSelector.class)
-public class EmbeddedTimeSelectorConnector extends AbstractComponentConnector implements HasComponentsConnector, WidgetCallback {
+public class EmbeddedTimeSelectorConnector extends AbstractComponentConnector implements WidgetCallback {
 
     TimeSelectorServerRpc rpc = RpcProxy.create(TimeSelectorServerRpc.class, this);
 
@@ -117,19 +117,4 @@ public class EmbeddedTimeSelectorConnector extends AbstractComponentConnector im
         getWidget().setFillColor(getState().fillColor);
     }
 
-    @Override
-    public void updateCaption(ComponentConnector componentConnector) {}
-
-    @Override
-    public List<ComponentConnector> getChildComponents() {
-        return null;
-    }
-
-    @Override
-    public void setChildComponents(List<ComponentConnector> list) {}
-
-    @Override
-    public HandlerRegistration addConnectorHierarchyChangeHandler(ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler connectorHierarchyChangeHandler) {
-        return null;
-    }
 }
