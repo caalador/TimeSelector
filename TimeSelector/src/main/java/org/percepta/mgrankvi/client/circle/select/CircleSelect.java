@@ -17,7 +17,6 @@ import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
-import org.percepta.mgrankvi.client.Number;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -29,6 +28,7 @@ import java.util.List;
 public class CircleSelect extends Composite implements MouseMoveHandler, MouseOutHandler, TouchMoveHandler, TouchEndHandler {
 
     private String SELECTOR_COLOUR = "mediumaquamarine";
+    private String OTHER_COLOUR = "seagreen";
 
     private final Canvas time;
 
@@ -50,8 +50,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
     private int sectors = 12;
     private Integer value = 12;
 
-
-    public CircleSelect(final CircleSelectCallback circleSelectCallback, int size, Integer... values) {
+    public CircleSelect(int size, final CircleSelectCallback circleSelectCallback, Integer...values) {
         this.circleSelectCallback = circleSelectCallback;
         this.values.addAll(Arrays.asList(values));
 
@@ -78,6 +77,24 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             time.addDomHandler(this, TouchEndEvent.getType());
         }
         initWidget(baseContent);
+    }
+
+    public CircleSelect(String fillColor, String selectorColor, int size, final CircleSelectCallback callback, Integer...values) {
+        this(size, callback, values);
+        SELECTOR_COLOUR = selectorColor;
+        OTHER_COLOUR = fillColor;
+    }
+
+    public void setSelectorColor(String color) {
+        this.SELECTOR_COLOUR = color;
+        clearCanvas();
+        refresh();
+    }
+
+    public void setFillColor(String color) {
+        this.OTHER_COLOUR = color;
+        clearCanvas();
+        refresh();
     }
 
     /**
@@ -212,7 +229,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                 double x = circleX + (Math.cos(rad) * (radian - 15)) - halfWidth;
                 double y = circleY + (Math.sin(rad) * (radian - 15)) + (context.measureText("W").getWidth() / 2);
 
-                numbers.add(new org.percepta.mgrankvi.client.Number(values.get(i - 1), x, y));
+                numbers.add(new Number(values.get(i - 1), x, y));
             }
             if (!innerValues.isEmpty()) {
                 for (int i = 1; i <= innerValues.size(); i++) {
@@ -222,7 +239,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
                     double x = circleX + (Math.cos(rad) * (radian / 2)) - halfWidth;
                     double y = circleY + (Math.sin(rad) * (radian / 2)) + (context.measureText("W").getWidth() / 2);
 
-                    numbers.add(new org.percepta.mgrankvi.client.Number(innerValues.get(i - 1), x, y));
+                    numbers.add(new Number(innerValues.get(i - 1), x, y));
                 }
             }
         }
@@ -253,7 +270,7 @@ public class CircleSelect extends Composite implements MouseMoveHandler, MouseOu
             context.fill();
 
             context.beginPath();
-            context.setFillStyle("seagreen");
+            context.setFillStyle(OTHER_COLOUR);
             context.arc(x, y, 2, 0, 2 * Math.PI, false);
             context.closePath();
             context.fill();

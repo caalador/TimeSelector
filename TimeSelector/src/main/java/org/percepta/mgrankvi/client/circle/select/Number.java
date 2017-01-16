@@ -1,4 +1,4 @@
-package org.percepta.mgrankvi.client;
+package org.percepta.mgrankvi.client.circle.select;
 
 import com.google.gwt.i18n.client.NumberFormat;
 

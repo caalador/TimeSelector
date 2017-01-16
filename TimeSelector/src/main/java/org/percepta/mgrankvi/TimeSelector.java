@@ -4,9 +4,9 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomField;
-import org.percepta.mgrankvi.client.TimeSelectorClientRpc;
-import org.percepta.mgrankvi.client.TimeSelectorServerRpc;
-import org.percepta.mgrankvi.client.TimeSelectorState;
+import org.percepta.mgrankvi.client.popup.TimeSelectorClientRpc;
+import org.percepta.mgrankvi.client.popup.TimeSelectorServerRpc;
+import org.percepta.mgrankvi.client.popup.TimeSelectorState;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -14,8 +14,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-// This is the server-side UI component that provides public API 
-// for MyComponent
 public class TimeSelector extends CustomField<Date> {
 
     int hour = 0;
@@ -37,8 +35,6 @@ public class TimeSelector extends CustomField<Date> {
     };
 
     public TimeSelector() {
-
-        // To receive events from the client, we register ServerRpc
         registerRpc(rpc);
     }
 
@@ -52,7 +48,6 @@ public class TimeSelector extends CustomField<Date> {
         return new CssLayout();
     }
 
-    // We must override getState() to cast the state to MyComponentState
     @Override
     public TimeSelectorState getState() {
         return (TimeSelectorState) super.getState();
@@ -149,8 +144,7 @@ public class TimeSelector extends CustomField<Date> {
      * Interface for listening for a change fired by a {@link Component}.
      */
     public interface SelectionChangeListener extends Serializable {
-        public void selectionChanged(SelectionChangeEvent event);
-
+        void selectionChanged(SelectionChangeEvent event);
     }
 
     /**

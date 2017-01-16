@@ -1,8 +1,8 @@
 package org.percepta.mgrankvi.client.circle.select;
 
 import com.google.gwt.user.client.ui.Widget;
+import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.RpcProxy;
-import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 
@@ -14,12 +14,9 @@ public class CircleSelectConnector extends AbstractComponentConnector {
 
     CircleSelectServerRpc rpc = RpcProxy.create(CircleSelectServerRpc.class, this);
 
-    int value = 0;
-
     CircleSelectCallback callback = new CircleSelectCallback() {
         @Override
         public void valueSelection(Integer timeValue) {
-            value = timeValue;
             rpc.setSelection(timeValue);
         }
 
@@ -33,7 +30,7 @@ public class CircleSelectConnector extends AbstractComponentConnector {
             if (getState().values.length == getState().sectors) {
                 boolean found = false;
                 for (int i = 0; i < getState().sectors; i++) {
-                    if (getState().values[i] == value) {
+                    if (getState().values[i] == getState().currentValue) {
                         getWidget().setSelection((i + 1) % getState().sectors);
                         found = true;
                         break;
@@ -42,19 +39,18 @@ public class CircleSelectConnector extends AbstractComponentConnector {
                 // Selector wasn't found so it probably is on the inner line.
                 // Inner circle is matched by actual value.
                 if (!found) {
-                    getWidget().setSelection(value);
+                    getWidget().setSelection(getState().currentValue);
                 }
             } else {
-                getWidget().setSelection(value);
+                getWidget().setSelection(getState().currentValue);
             }
         }
     };
 
     @Override
     protected Widget createWidget() {
-        return new CircleSelect(callback, 250, getState().values);
+        return new CircleSelect(getState().size, callback, getState().values);
     }
-
 
     @Override
     public CircleSelect getWidget() {
@@ -66,17 +62,31 @@ public class CircleSelectConnector extends AbstractComponentConnector {
         return (CircleSelectState) super.getState();
     }
 
-    @Override
-    public void onStateChanged(StateChangeEvent stateChangeEvent) {
-        super.onStateChanged(stateChangeEvent);
-        getWidget().setSectors(getState().sectors);
+    @OnStateChange("size")
+    void sizeChanged() {
+        getWidget().setSize(getState().size);
+        getWidget().refresh();
+    }
 
-        getWidget().setValues(getState().values);
-        if (getState().innerValues != null) {
-            getWidget().setInnerValues(getState().innerValues);
-        }
-        if(getState().currentValue != null) {
-            getWidget().setSelection(getState().currentValue);
-        }
+    @OnStateChange("selectorColor")
+    void selectorColorChanged() {
+        getWidget().setSelectorColor(getState().selectorColor);
+        getWidget().refresh();
+    }
+
+    @OnStateChange("fillColor")
+    void fillColorChanged() {
+        getWidget().setFillColor(getState().fillColor);
+        getWidget().refresh();
+    }
+
+    @OnStateChange("innerValues")
+    void innerValuesChanged() {
+        getWidget().setInnerValues(getState().innerValues);
+    }
+
+    @OnStateChange("currentValue")
+    void currentValueChanged() {
+        getWidget().setSelection(getState().currentValue);
     }
 }
