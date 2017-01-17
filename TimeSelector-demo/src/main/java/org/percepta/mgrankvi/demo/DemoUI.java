@@ -3,7 +3,6 @@ package org.percepta.mgrankvi.demo;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.Property;
 import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.VaadinRequest;
@@ -21,7 +20,7 @@ import org.percepta.mgrankvi.CircleSelect;
 import org.percepta.mgrankvi.TimeSelector;
 
 import javax.servlet.annotation.WebServlet;
-import java.util.Date;
+import java.time.LocalTime;
 
 @Theme("demo")
 @Title("MyComponent Add-on Demo")
@@ -52,7 +51,7 @@ public class DemoUI extends UI {
             }
         });
 
-        component.setValue(new Date());
+        component.setValue(LocalTime.now());
 
         // Show it in the middle of the screen
         final VerticalLayout contentLayout = new VerticalLayout();
@@ -64,30 +63,24 @@ public class DemoUI extends UI {
         content.setSpacing(true);
         content.setCaption("TimeSelector");
         contentLayout.addComponent(content);
-        content.addComponent(new Button("am/pm", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                twentyFour = !twentyFour;
-                component.setTwentyFour(twentyFour);
-                if (twentyFour) {
-                    clickEvent.getButton().setCaption("Switch to am/pm");
-                } else {
-                    clickEvent.getButton().setCaption("Switch to twenty four");
-                }
+        content.addComponent(new Button("am/pm", (Button.ClickListener) clickEvent -> {
+            twentyFour = !twentyFour;
+            component.setTwentyFour(twentyFour);
+            if (twentyFour) {
+                clickEvent.getButton().setCaption("Switch to am/pm");
+            } else {
+                clickEvent.getButton().setCaption("Switch to twenty four");
             }
         }));
-        content.addComponent(new Button("Restrict minutes", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                if(clickEvent.getButton().getCaption().equals("Restrict minutes")) {
-                    component.setMinuteCaptions(15, 30, 45, 00);
-                    component.setMinuteSectors(4);
-                    clickEvent.getButton().setCaption("Unrestrict minutes");
-                } else {
-                    component.setMinuteCaptions(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 00);
-                    component.setMinuteSectors(60);
-                    clickEvent.getButton().setCaption("Restrict minutes");
-                }
+        content.addComponent(new Button("Restrict minutes", (Button.ClickListener) clickEvent -> {
+            if (clickEvent.getButton().getCaption().equals("Restrict minutes")) {
+                component.setMinuteCaptions(15, 30, 45, 00);
+                component.setMinuteSectors(4);
+                clickEvent.getButton().setCaption("Unrestrict minutes");
+            } else {
+                component.setMinuteCaptions(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 00);
+                component.setMinuteSectors(60);
+                clickEvent.getButton().setCaption("Restrict minutes");
             }
         }));
         content.addComponent(component);
@@ -97,54 +90,39 @@ public class DemoUI extends UI {
         circles.setCaption("CircleSelect as freestanding component");
 
         final CircleSelect defaultCircle = new CircleSelect();
-        defaultCircle.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                Notification.show("Selected from default: " + defaultCircle.getValue());
-            }
-        });
+        defaultCircle.addValueChangeListener(e ->
+                Notification.show("Selected from default: " + defaultCircle.getValue())
+        );
         Label defaultLabel = new Label("Default settings");
-        circles.addComponent(new VerticalLayout(defaultCircle,defaultLabel));
+        circles.addComponent(new VerticalLayout(defaultCircle, defaultLabel));
 
         final CircleSelect minutes = new CircleSelect();
         minutes.setSectors(60);
-        minutes.setVisibleValues(5,10,15,20,25,30,35,40,45,50,55,0);
+        minutes.setVisibleValues(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 0);
         minutes.setValue(17);
-        minutes.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                Notification.show("Selected from minutes: " + minutes.getValue());
-            }
-        });
+        minutes.addValueChangeListener(e ->
+                Notification.show("Selected from minutes: " + minutes.getValue())
+        );
         Label minutesLabel = new Label("Sectors: 60<br/>Values: 5,10,15,20,25,30,35,40,45,50,55,0<br/>Note! 0 returns 60", ContentMode.HTML);
-        circles.addComponent(new VerticalLayout(minutes,minutesLabel));
+        circles.addComponent(new VerticalLayout(minutes, minutesLabel));
 
         final CircleSelect fullDay = new CircleSelect();
         fullDay.setSectors(12);
-        fullDay.setVisibleValues(1,2,3,4,5,6,7,8,9,10,11,0);
-        fullDay.setInnerValues(13,14,15,16,17,18,19,20,21,22,23,24);
+        fullDay.setVisibleValues(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0);
+        fullDay.setInnerValues(13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24);
         fullDay.setValue(18);
-        fullDay.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                Notification.show("Selected from full day: " + fullDay.getValue());
-            }
-        });
+        fullDay.addValueChangeListener(e -> Notification.show("Selected from full day: " + fullDay.getValue()));
         Label fullDayLabel = new Label("Sectors: 12<br/>Values: 1,2,3,4,5,6,7,8,9,10,11,0<br/>Inner values: 13,14,15,16,17,18,19,20,21,22,23,24" +
                 "<br/>Note! values are returned the same as the labels.", ContentMode.HTML);
-        circles.addComponent(new VerticalLayout(fullDay,fullDayLabel));
+        circles.addComponent(new VerticalLayout(fullDay, fullDayLabel));
 
         final CircleSelect restricted = new CircleSelect();
-        restricted.setVisibleValues(15,30,45,0);
+        restricted.setVisibleValues(15, 30, 45, 0);
         restricted.setSectors(4);
-        restricted.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                Notification.show("Selected from restricted: " + restricted.getValue());
-            }
-        });
+        restricted.addValueChangeListener(e -> Notification.show("Selected from restricted: " + restricted.getValue()));
+
         Label restrictedLabel = new Label("Sectors: 4<br/>Values: 15,30,45,0", ContentMode.HTML);
-        circles.addComponent(new VerticalLayout(restricted,restrictedLabel));
+        circles.addComponent(new VerticalLayout(restricted, restrictedLabel));
 
         contentLayout.addComponent(circles);
         contentLayout.setComponentAlignment(content, Alignment.MIDDLE_CENTER);
