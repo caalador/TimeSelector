@@ -1,6 +1,5 @@
 package org.percepta.mgrankvi;
 
-import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomField;
@@ -10,41 +9,22 @@ import org.percepta.mgrankvi.client.TimeSelectorState;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalTime;
 
-// This is the server-side UI component that provides public API 
-// for MyComponent
-public class TimeSelector extends CustomField<Date> {
+public class TimeSelector extends CustomField<LocalTime> {
 
-    int hour = 0;
-    int minute = 0;
+    LocalTime value;
 
-    // To process events from the client, we implement ServerRpc
     private TimeSelectorServerRpc rpc = new TimeSelectorServerRpc() {
 
         @Override
         public void valueSelection(int hours, int minutes) {
-            hour = hours;
-            minute = minutes;
-            Calendar cal = GregorianCalendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, hours);
-            cal.set(Calendar.MINUTE, minutes);
-            setValue(cal.getTime());
-            fireChangeEvent(hours, minutes);
+            setValue(LocalTime.of(hours, minutes));
         }
     };
 
     public TimeSelector() {
-
-        // To receive events from the client, we register ServerRpc
         registerRpc(rpc);
-    }
-
-    @Override
-    public Class<? extends Date> getType() {
-        return Date.class;
     }
 
     @Override
@@ -74,7 +54,7 @@ public class TimeSelector extends CustomField<Date> {
      * @return the selected hour (from 0 to 23)
      */
     public int getHours() {
-        return getValue().getHours();
+        return getValue().getHour();
     }
 
     /**
@@ -83,7 +63,7 @@ public class TimeSelector extends CustomField<Date> {
      * @return the currently selected minute (from 0 to 59)
      */
     public int getMinutes() {
-        return getValue().getMinutes();
+        return getValue().getMinute();
     }
 
     public void setMinuteCaptions(Integer... minuteLabels) {
@@ -105,9 +85,16 @@ public class TimeSelector extends CustomField<Date> {
     }
 
     @Override
-    public void setValue(Date newFieldValue) throws ReadOnlyException, Converter.ConversionException {
-        super.setValue(newFieldValue);
-        setTime(newFieldValue.getHours(), newFieldValue.getMinutes());
+    public LocalTime getValue() {
+        return value;
+    }
+
+    @Override
+    protected void doSetValue(LocalTime newFieldValue) {
+        value = newFieldValue;
+        setTime(newFieldValue.getHour(), newFieldValue.getMinute());
+
+        fireChangeEvent(newFieldValue);
     }
 
     private static final Method SELECTION_EVENT;
@@ -174,7 +161,7 @@ public class TimeSelector extends CustomField<Date> {
     /**
      * Fires a event to all listeners without any event details.
      */
-    public void fireChangeEvent(int hours, int minutes) {
-        fireEvent(new SelectionChangeEvent(this, hours, minutes));
+    public void fireChangeEvent(LocalTime value) {
+        fireEvent(new SelectionChangeEvent(this, value.getHour(), value.getMinute()));
     }
 }
