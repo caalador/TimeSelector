@@ -15,18 +15,13 @@
  */
 package org.percepta.mgrankvi;
 
-import java.time.LocalTime;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.router.Route;
 
-import com.vaadin.flow.component.AbstractSinglePropertyField;
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.HtmlImport;
+@Route("")
+public class TimeSelectorDemo extends Div {
 
-@Tag("time-selector")
-@HtmlImport("TimeSelector.html")
-public class TimeSelector
-        extends AbstractSinglePropertyField<TimeSelector, String> {
-
-    public TimeSelector() {
-        super("value", LocalTime.now().toString(), false);
+    public TimeSelectorDemo() {
+        add(new TimeSelector());
     }
 }
