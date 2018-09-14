@@ -28,5 +28,11 @@ public class TimeSelector
 
     public TimeSelector() {
         super("value", LocalTime.now().toString(), false);
+        setHour(5);
+        setValue(LocalTime.of(10, 15).toString());
+    }
+
+    public void setHour(int hour) {
+        getElement().setProperty("actualSelection", hour);
     }
 }
