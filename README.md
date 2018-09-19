@@ -1,3 +1,6 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/timeselector-add-on)
+[![Stars on Vaadin Directory](https://img.shields.io/vaadin-directory/star/timeselector-add-on.svg)](https://vaadin.com/directory/component/timeselector-add-on)
+
 # MyComponent Add-on for Vaadin 7
 
 MyComponent is an UI component add-on for Vaadin 7.
