@@ -1,0 +1,152 @@
+<!-- Dependency resources -->
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="CircleSelector.html">
+
+<!-- Defines the example-template element -->
+<dom-module id="popup-selector">
+
+    <template>
+
+        <style type="text/css">
+            .popup {
+                width: 275px;
+                height: 325px;
+                /*position: absolute;*/
+                /*top: 50%;*/
+                /*left: 50%;*/
+                /*margin: -50px 0 0 -100px;*/
+
+                display: block;
+                background-color: aqua;
+            }
+
+            .content {
+                display: flex;
+                flex-flow: column;
+                text-align: center;
+                justify-content: space-around;
+            }
+        </style>
+
+        <div class="popup">
+            <div class="content">
+                <div style="display: flex; text-align: center;">
+                    <label>[[hours]]</label><label>:</label><label>[[minutes]]</label>
+                </div>
+                <slot></slot>
+                <span style="align-self: flex-end;">
+                    <button on-click="_selectAndClose">Ok</button>
+                    <button on-click="_cancelAndClose">Cancel</button>
+                </span>
+            </div>
+        </div>
+    </template>
+
+    <!-- Polymer boilerplate to register the example-template element -->
+    <script>
+        class PopupSelector extends Polymer.Element {
+            static get is() {
+                return 'popup-selector'
+            }
+
+            static get properties() {
+                return {
+                    value: {
+                        type: String
+                    },
+                    hours: {
+                        type: Number
+                    },
+                    minutes: {
+                        type: Number
+                    },
+                    showingHours: {
+                        type: Boolean,
+                        value: true
+                    },
+                    updating: {
+                        type: Boolean,
+                        value: false
+                    },
+                    selector: {
+                        type: Node,
+                        value: new CircleSelector()
+                    }
+                }
+            }
+
+            ready() {
+                super.ready();
+                this._initializeCircle();
+                this.selector.addEventListener('actual-selection-changed', this._selection.bind(this));
+            }
+
+            _initializeCircle() {
+                this.selector.values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                this.selector.innerValues = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+                this.selector.numbers = [];
+                this.selector.numSlices = 24;
+
+                this.updating = true;
+                this.selector.selection = this.selector.actualSelection = this.hours;
+                this.updating = false;
+
+                this.appendChild(this.selector);
+                this.open = true;
+            }
+
+            _selection() {
+                if (this.updating) {
+                    return;
+                }
+
+                if (this.showingHours) {
+                    this.selector.values = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 0];
+                    this.selector.innerValues = [];
+                    this.selector.numbers = [];
+                    this.selector.numSlices = 120;
+                    this.hours = this.selector.actualSelection;
+
+                    this.updating = true;
+                    this.selector.selection = this.selector.actualSelection = this.minutes;
+                    this.updating = false;
+
+                    this.showingHours = false;
+                    this._populateString();
+                } else {
+                    this.minutes = this.selector.actualSelection;
+                    this._populateString();
+                }
+            }
+
+            _populateString() {
+                var hours = (this.hours + '');
+                var minutes = (this.minutes + '');
+                if (hours < 2) {
+                    hours = '0' + this.hours;
+                }
+                if (minutes < 2) {
+                    minutes = '0' + this.minutes;
+                }
+                this.value = hours + ':' + minutes;
+            }
+
+            _selectAndClose() {
+                this.dispatchEvent(new CustomEvent('values', {
+                    detail: {
+                        hours: this.hours,
+                        minutes: this.minutes,
+                    }
+                }));
+                document.body.removeChild(this);
+            }
+
+            _cancelAndClose() {
+                document.body.removeChild(this);
+            }
+        }
+
+        customElements.define(PopupSelector.is, PopupSelector);
+
+    </script>
+</dom-module>

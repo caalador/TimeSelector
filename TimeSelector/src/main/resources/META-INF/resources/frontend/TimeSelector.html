@@ -1,12 +1,11 @@
 <!-- Dependency resources -->
 <link rel="import" href="bower_components/polymer/polymer-element.html">
-<link rel="import" href="CircleSelector.html">
+<link rel="import" href="PopupSelector.html">
 
 <!-- Defines the example-template element -->
 <dom-module id="time-selector">
     <template>
         <label on-click="_openCircle">[[value]]</label>
-        <slot></slot>
     </template>
 
     <!-- Polymer boilerplate to register the example-template element -->
@@ -29,50 +28,50 @@
                         type: Boolean,
                         value: true
                     },
-                    selector: {
-                        type: Node,
-                        value: new CircleSelector()
+                    updating: {
+                        type: Boolean,
+                        value: false
                     }
                 }
-            }
-
-            ready() {
-                super.ready();
-                this.selector.addEventListener('actual-selection-changed', this._selection.bind(this));
             }
 
             _openCircle() {
-                if (this.open === true) {
-                    this.removeChild(this.selector);
-                    this.open = false;
-                } else {
-                    this.selector.values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-                    this.selector.innerValues = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
-                    this.selector.numbers = [];
-                    this.selector.numSlices = 24;
-                    this.selector.selection = this.selector.actualSelection = this.value.substring(0, this.value.indexOf(":"));
+                var popup = new PopupSelector();
+                document.body.appendChild(popup);
+                popup.hours = this._parseHours();
+                popup.minutes = this._parseMinutes();
+                popup._populateString();
+                popup._initializeCircle();
 
-                    this.appendChild(this.selector);
-                    this.open = true;
+                popup.addEventListener('values', function () {
+                    this._valueChange()
+                }.bind(this));
+            }
+
+            _valueChange() {
+                if (event) {
+                    this._populateString(event.detail.hours, event.detail.minutes);
                 }
             }
 
-            _selection() {
-                if(this.open === true) {
-                    if (this.hours === true) {
-                        this.selector.values = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 0];
-                        this.selector.innerValues = [];
-                        this.selector.numbers = [];
-                        this.selector.numSlices = 120;
-                        this.value = this.selector.actualSelection + ':' + this.value.substring(this.value.indexOf(":") + 1, this.value.length);
-                        this.selector.selection = this.selector.actualSelection = this.value.substring(this.value.indexOf(":") + 1, this.value.length);
-                        this.hours = false;
-                    } else {
-                        this.value = this.value.substring(0, this.value.indexOf(":")) +':' + this.selector.actualSelection;
-                        this.hours = true;
-                        this._openCircle();
-                    }
+            // Parse the current minute value from the value string
+            _parseMinutes() {
+                return this.value.substring(this.value.indexOf(":") + 1, this.value.length);
+            }
+
+            // Parse the current hour value from the value string
+            _parseHours() {
+                return this.value.substring(0, this.value.indexOf(":"))
+            }
+
+            _populateString(hours, minutes) {
+                if ((hours + '') < 2) {
+                    hours = '0' + hours;
                 }
+                if ((minutes + '') < 2) {
+                    minutes = '0' + minutes;
+                }
+                this.value = hours + ':' + minutes;
             }
         }
 

@@ -22,6 +22,9 @@ import com.vaadin.flow.router.Route;
 public class TimeSelectorDemo extends Div {
 
     public TimeSelectorDemo() {
-        add(new TimeSelector());
+        TimeSelector timeSelector = new TimeSelector();
+        timeSelector.addValueChangeListener(
+                event -> System.out.println(event.getValue()));
+        add(timeSelector);
     }
 }
