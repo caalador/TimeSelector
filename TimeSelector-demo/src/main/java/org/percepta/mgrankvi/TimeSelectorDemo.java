@@ -15,16 +15,27 @@
  */
 package org.percepta.mgrankvi;
 
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
 @Route("")
-public class TimeSelectorDemo extends Div {
+public class TimeSelectorDemo extends VerticalLayout {
 
     public TimeSelectorDemo() {
         TimeSelector timeSelector = new TimeSelector();
         timeSelector.addValueChangeListener(
                 event -> System.out.println(event.getValue()));
-        add(timeSelector);
+
+        final CircleSelect circle = new CircleSelect();
+        circle.setSectors(60);
+        circle.setVisibleValues(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 0);
+        circle.setValue(17);
+
+        Span text = new Span("CircleSelect selection: " + circle.getValue());
+        circle.addValueChangeListener(event -> text.setText("CircleSelect selection: " + circle.getValue()));
+
+        add(timeSelector, new HorizontalLayout(circle, text));
     }
 }
