@@ -21,6 +21,11 @@ import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 
+/**
+ * Create a TimeSelector element.
+ * Value type is String, but the component works with LocalTime when using
+ * it through the set/getTime api.
+ */
 @Tag("time-selector")
 @HtmlImport("TimeSelector.html")
 public class TimeSelector
@@ -28,11 +33,20 @@ public class TimeSelector
 
     public TimeSelector() {
         super("value", LocalTime.now().toString(), false);
-        setHour(5);
-        setValue(LocalTime.of(10, 15).toString());
     }
 
-    public void setHour(int hour) {
-        getElement().setProperty("actualSelection", hour);
+    /**
+     * Set the local time for the component.
+     *
+     * @param value
+     *         time value as a LocalTime
+     */
+    public void setTime(LocalTime value) {
+        setValue(value.toString());
     }
+
+    public LocalTime getTime() {
+        return LocalTime.parse(getValue());
+    }
+
 }

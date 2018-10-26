@@ -155,6 +155,12 @@
             }
 
             _populateString() {
+                if(this.hours == 24) {
+                    this.hours = 0;
+                }
+                if(this.minutes == 60) {
+                    this.minutes =  0;
+                }
                 this.hours = (this.hours + '');
                 this.minutes = (this.minutes + '');
                 if (this.hours.length < 2) {

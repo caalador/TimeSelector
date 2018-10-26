@@ -27,7 +27,8 @@
             static get properties() {
                 return {
                     value: {
-                        type: String
+                        type: String,
+                        notify: true
                     },
                     open: {
                         type: Boolean,
@@ -74,10 +75,10 @@
             }
 
             _populateString(hours, minutes) {
-                if ((hours + '') < 2) {
+                if (hours.length < 2) {
                     hours = '0' + hours;
                 }
-                if ((minutes + '') < 2) {
+                if (minutes.length < 2) {
                     minutes = '0' + minutes;
                 }
                 this.value = hours + ':' + minutes;

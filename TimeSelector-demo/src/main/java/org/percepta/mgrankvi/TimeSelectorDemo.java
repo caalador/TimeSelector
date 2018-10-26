@@ -15,6 +15,8 @@
  */
 package org.percepta.mgrankvi;
 
+import java.time.LocalTime;
+
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -25,6 +27,8 @@ public class TimeSelectorDemo extends VerticalLayout {
 
     public TimeSelectorDemo() {
         TimeSelector timeSelector = new TimeSelector();
+        timeSelector.setTime(LocalTime.of(10, 25));
+
         timeSelector.addValueChangeListener(
                 event -> System.out.println(event.getValue()));
 
@@ -33,9 +37,9 @@ public class TimeSelectorDemo extends VerticalLayout {
         circle.setVisibleValues(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 0);
         circle.setValue(17);
 
-        Span text = new Span("CircleSelect selection: " + circle.getValue());
-        circle.addValueChangeListener(event -> text.setText("CircleSelect selection: " + circle.getValue()));
+        Span circle_text = new Span("CircleSelect selection: " + circle.getValue());
+        circle.addValueChangeListener(event -> circle_text.setText("CircleSelect selection: " + circle.getValue()));
 
-        add(timeSelector, new HorizontalLayout(circle, text));
+        add(timeSelector, new HorizontalLayout(circle, circle_text));
     }
 }
