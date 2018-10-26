@@ -5,7 +5,16 @@
 <!-- Defines the example-template element -->
 <dom-module id="time-selector">
     <template>
-        <label on-click="_openCircle">[[value]]</label>
+        <style>
+            :host {
+                --selector-font-size: 20px;
+            }
+            .time-selector {
+                font-size: var(--selector-font-size);
+            }
+        </style>
+
+        <label class="time-selector" on-click="_openCircle">[[value]]</label>
     </template>
 
     <!-- Polymer boilerplate to register the example-template element -->
