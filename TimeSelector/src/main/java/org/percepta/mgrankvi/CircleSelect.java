@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2017 Vaadin Ltd.
+ * Copyright 2020 mgrankvi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,13 +17,13 @@ package org.percepta.mgrankvi;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.JsModule;
 
 import elemental.json.Json;
 import elemental.json.JsonArray;
 
 @Tag("circle-selector")
-@HtmlImport("CircleSelector.html")
+@JsModule("./CircleSelector.js")
 public class CircleSelect
         extends AbstractSinglePropertyField<CircleSelect, Integer> {
 

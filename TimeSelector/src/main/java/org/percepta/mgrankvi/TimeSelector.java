@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2017 Vaadin Ltd.
+ * Copyright 2020 mgrankvi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,15 +19,15 @@ import java.time.LocalTime;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.JsModule;
 
 /**
  * Create a TimeSelector element.
  * Value type is String, but the component works with LocalTime when using
  * it through the set/getTime api.
  */
-@Tag("time-selector")
-@HtmlImport("TimeSelector.html")
+@Tag("time-selector")s
+@JsModule("./TimeSelector.js")
 public class TimeSelector
         extends AbstractSinglePropertyField<TimeSelector, String> {
 

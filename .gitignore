@@ -6,3 +6,12 @@ TimeSelector-demo/target
 TimeSelector/target
 styles.css
 *.iml
+**/node_modules
+TimeSelector-demo/package.json
+TimeSelector-demo/webpack.config.js
+TimeSelector-demo/webpack.generated.js
+TimeSelector-demo/package-lock.json
+.settings
+.vscode
+.project
+**/.classpath
