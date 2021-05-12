@@ -4,7 +4,7 @@ TimeSelector is an UI component add-on for Vaadin Platform 10+.
 
 ## Download release
 
-Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to http://vaadin.com/addon/TimeSelector
+Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to https://vaadin.com/directory/component/timeselector-add-on
 
 ## Building and running demo
 
