@@ -5,3 +5,9 @@ TimeSelector-demo/src/main/webapp/VAADIN/widgetsets
 TimeSelector-demo/target
 TimeSelector/target
 styles.css
+.settings
+.vscode
+TimeSelector-demo/node_modules
+*.classpath
+*.project
+*.iml

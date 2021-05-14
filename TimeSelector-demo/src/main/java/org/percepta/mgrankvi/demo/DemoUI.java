@@ -14,8 +14,11 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+
 import org.percepta.mgrankvi.CircleSelect;
 import org.percepta.mgrankvi.TimeSelector;
 
@@ -129,6 +132,19 @@ public class DemoUI extends UI {
         contentLayout.setComponentAlignment(circles, Alignment.MIDDLE_CENTER);
         setContent(contentLayout);
 
+        Button modalWindow = new Button("Open modal window", clickEvent -> {
+
+            Window popup = new Window();
+            UI.getCurrent().addWindow(popup);
+            final TimeSelector modalCircle = new TimeSelector();
+            modalCircle.addValueChangeListener(e ->
+                    Notification.show("Selected from default: " + modalCircle.getValue())
+            );
+            popup.setModal(true);
+            popup.setContent(new Panel(modalCircle));
+        });
+
+        contentLayout.addComponent(modalWindow);
     }
 
 }
