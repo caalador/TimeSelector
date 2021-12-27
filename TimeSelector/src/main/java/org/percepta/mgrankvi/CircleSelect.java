@@ -1,130 +1,51 @@
+/*
+ * Copyright 2020 mgrankvi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.percepta.mgrankvi;
 
-import com.vaadin.event.ConnectorEventListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.CustomField;
-import com.vaadin.util.ReflectTools;
-import org.percepta.mgrankvi.client.circle.select.CircleSelectServerRpc;
-import org.percepta.mgrankvi.client.circle.select.CircleSelectState;
+import com.vaadin.flow.component.AbstractSinglePropertyField;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.JsModule;
 
-import java.lang.reflect.Method;
+import elemental.json.Json;
+import elemental.json.JsonArray;
 
-/**
- * @author Mikael Grankvist - Vaadin Ltd
- */
-public class CircleSelect extends CustomField<Integer> {
-
-    CircleSelectServerRpc rpc = new CircleSelectServerRpc() {
-        @Override
-        public void setSelection(Integer newValue) {
-            setValue(newValue);
-        }
-
-        @Override
-        public void valueHover(Integer hoverValue) {
-            fireHoverEvent(hoverValue);
-        }
-    };
+@Tag("circle-selector")
+@JsModule("./CircleSelector.js")
+public class CircleSelect
+        extends AbstractSinglePropertyField<CircleSelect, Integer> {
 
     public CircleSelect() {
-        registerRpc(rpc);
+        super("actualSelection", 0, false);
     }
 
-    @Override
-    protected Component initContent() {
-        return new CssLayout();
+    public void setSectors(int i) {
+        getElement().setProperty("sectors", Integer.toString(i));
+        setNumSlices(i * 2);
     }
 
-    @Override
-    protected CircleSelectState getState() {
-        return (CircleSelectState) super.getState();
-    }
-
-    @Override
-    protected CircleSelectState getState(boolean markAsDirty) {
-        return (CircleSelectState) super.getState(markAsDirty);
-    }
-
-    /**
-     * Set the visible values to be drawn into the circle
-     *
-     * @param values Values to draw into circle
-     */
-    public void setVisibleValues(Integer... values) {
-        getState().values = values;
-    }
-
-    /**
-     * Set amount of selectable sectors. If sectors == values.length selection will happen by values[sector]
-     *
-     * @param sectors Amount of sectors in circle
-     */
-    public void setSectors(int sectors) {
-        getState().sectors = sectors;
-    }
-
-    /**
-     * Set inner values to circle.
-     * NOTE: Amount of values should correspond to sector amount!!
-     *
-     * @param values Inner values to draw to circle
-     */
-    public void setInnerValues(Integer... values) {
-        getState().innerValues = values;
-    }
-
-    /**
-     * Clear the inner values of the circle
-     */
-    public void clearInnerValues() {
-        getState().innerValues = null;
-    }
-
-    @Override
-    protected void doSetValue(Integer newFieldValue) {
-        getState().currentValue = newFieldValue;
-    }
-
-    @Override
-    public Integer getValue() {
-        return getState(false).currentValue;
-    }
-
-    public interface HoverEventListener extends ConnectorEventListener {
-
-        Method ACTION_CLICK_METHOD = ReflectTools.findMethod(HoverEventListener.class, "actionClick",
-                HoverEvent.class);
-
-        void actionClick(HoverEvent event);
-    }
-
-    public static class HoverEvent extends Component.Event {
-
-        private final Integer value;
-
-        public HoverEvent(CircleSelect circleSelect, Integer value) {
-            super(circleSelect);
-            this.value = value;
+    public void setVisibleValues(int... values) {
+        JsonArray array = Json.createArray();
+        for (int i = 0; i < values.length; i++) {
+            array.set(i, Integer.toString(values[i]));
         }
-
-        public Integer getValue() {
-            return value;
-        }
+        getElement().setPropertyJson("values", array);
+        getElement().setPropertyJson("numbers", Json.createArray());
     }
 
-    public void addHoverEventListener(HoverEventListener listener) {
-        addListener(HoverEvent.class, listener, HoverEventListener.ACTION_CLICK_METHOD);
-    }
-
-    public void removeHoverEventListener(HoverEventListener listener) {
-        removeListener(HoverEventListener.class, listener);
-    }
-
-    /**
-     * Fires a event to all listeners without any event details.
-     */
-    public void fireHoverEvent(Integer value) {
-        fireEvent(new HoverEvent(this, value));
+    public void setNumSlices(int slices) {
+        getElement().setProperty("numSlices", Integer.toString(slices));
     }
 }
