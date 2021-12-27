@@ -19,6 +19,16 @@ import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 class CircleSelector extends PolymerElement {
   static get template() {
     return html`
+        <style>
+            :host {
+                --circle-stroke: gray;
+                --circle-inside: white;
+                --circle-selector: mediumaquamarine;
+                --circle-selector-dot: seagreen;
+                --circle-text: black;
+            }
+        </style>
+        
         <canvas on-mousemove="_onMouseMove" on-mouseout="_onMouseOut" on-click="_onSelect"
                 id="canvas"></canvas>
         `;
@@ -77,11 +87,13 @@ class CircleSelector extends PolymerElement {
     if (!ctx)
       return;
 
+    let styles = window.getComputedStyle(this, ":host");
+
     let canvas = this.$.canvas;
     canvas.width = 250;
     canvas.height = 250;
 
-    ctx.fillStyle = "gray";
+    ctx.fillStyle = styles.getPropertyValue("--circle-stroke");
     ctx.beginPath();
     ctx.arc(this.circleX, this.circleY, this.radian, 0, 2 * Math.PI, false);
     ctx.closePath();
@@ -89,14 +101,14 @@ class CircleSelector extends PolymerElement {
     ctx.fill();
 
     // Fill inside leaving only outside stroke.
-    ctx.fillStyle = "white";
+    ctx.fillStyle = styles.getPropertyValue("--circle-inside");
     ctx.beginPath();
     ctx.arc(this.circleX, this.circleY, this.radian, 0, 2 * Math.PI, false);
     ctx.closePath();
     ctx.fill();
 
     // Center dot
-    ctx.fillStyle = "gray";
+    ctx.fillStyle = styles.getPropertyValue("--circle-stroke");
     ctx.beginPath();
     ctx.arc(this.circleX, this.circleY, 1, 0, 2 * Math.PI, false);
     ctx.closePath();
@@ -112,12 +124,12 @@ class CircleSelector extends PolymerElement {
     }
 
     if (this.selection !== null) {
-      ctx.fillStyle = "gainsboro";
+      // ctx.fillStyle = "gainsboro";
 
       let degrees = (this.selection * (360 / (this.numSlices / 2)));
       let rad = (degrees * Math.PI / 180) - (0.5 * Math.PI);
 
-      ctx.strokeStyle = "mediumaquamarine";
+      ctx.strokeStyle = styles.getPropertyValue("--circle-selector");
       ctx.beginPath();
       ctx.moveTo(this.circleX, this.circleY);
       let radDistance = this.radian - 15;
@@ -131,22 +143,22 @@ class CircleSelector extends PolymerElement {
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.fillStyle = "mediumaquamarine";
+      ctx.fillStyle = styles.getPropertyValue("--circle-selector");
       ctx.arc(x, y, Math.sqrt(textWidth * textWidth + 15 * 15) / 2, 0, 2 * Math.PI, false);
       ctx.closePath();
       ctx.fill();
 
       if(this._noNumber()) {
         ctx.beginPath();
-        ctx.fillStyle = "seagreen";
+        ctx.fillStyle = styles.getPropertyValue("--circle-selector-dot");
         ctx.arc(x, y, 2, 0, 2 * Math.PI, false);
         ctx.closePath();
         ctx.fill();
       }
     }
 
-    ctx.strokeStyle = "black";
-    ctx.fillStyle = "black";
+    ctx.strokeStyle = styles.getPropertyValue("--circle-text");
+    ctx.fillStyle = styles.getPropertyValue("--circle-text");
 
     for (var i = 0; i < this.numbers.length; i++) {
       let number = this.numbers[i];
