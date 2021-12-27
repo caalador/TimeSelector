@@ -47,8 +47,8 @@ class CircleSelector extends PolymerElement {
       selectionVal: {type: Number, value: 12},
       sectors: {type: Number, value: 12},
       numSlices: {type: Number, value: 24},
-      circleX: {type: Number, value: 120},
-      circleY: {type: Number, value: 120},
+      circleX: {type: Number, value: 125},
+      circleY: {type: Number, value: 125},
       radian: {type: Number, value: 120},
       halfWidth: {type: Number, value: 10}
     }
@@ -78,8 +78,8 @@ class CircleSelector extends PolymerElement {
       return;
 
     let canvas = this.$.canvas;
-    canvas.width = 251;
-    canvas.height = 251;
+    canvas.width = 250;
+    canvas.height = 250;
 
     ctx.fillStyle = "gray";
     ctx.beginPath();
@@ -268,3 +268,4 @@ class CircleSelector extends PolymerElement {
 
 window.customElements.define(CircleSelector.is, CircleSelector);
 
+export { CircleSelector }

@@ -16,11 +16,11 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
-import './PopupSelector.js';
+import {PopupSelector} from "./PopupSelector";
 
 
 class TimeSelector extends PolymerElement {
-  get template() {
+  static get template() {
     return html`
         <style>
             :host {
@@ -60,21 +60,23 @@ class TimeSelector extends PolymerElement {
   }
 
   _openCircle() {
-    var popup = new PopupSelector();
+    const popup = new PopupSelector();
     document.body.appendChild(popup);
     popup.hours = this._parseHours();
     popup.minutes = this._parseMinutes();
     popup._populateString();
     popup._initializeCircle();
 
-    popup.addEventListener('values', function () {
-      this._valueChange()
+    popup.addEventListener('values', function (event) {
+      this._valueChange(event)
     }.bind(this));
   }
 
-  _valueChange() {
-    if (event) {
+  _valueChange(event) {
+    if (event.detail) {
       this._populateString(event.detail.hours, event.detail.minutes);
+    } else {
+      console.log(event);
     }
   }
 

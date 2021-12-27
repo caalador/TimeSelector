@@ -15,10 +15,10 @@
  */
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
-import './CircleSelector.js';
+import {CircleSelector} from "./CircleSelector";
 
 
-class PopupSelector extends PolymerElement {
+export class PopupSelector extends PolymerElement {
   static get template() {
     return html`
 
@@ -135,7 +135,7 @@ class PopupSelector extends PolymerElement {
         value: false
       },
       selector: {
-        type: Node,
+        type: Object,
         value: new CircleSelector()
       }
     }

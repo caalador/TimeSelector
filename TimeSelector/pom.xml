@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.percepta.mgrankvi</groupId>
         <artifactId>TimeSelector-root</artifactId>
-    <version>14.1.0-alpha1</version>
+    <version>14.8.0</version>
     </parent>
 
     <artifactId>TimeSelector</artifactId>
@@ -30,12 +30,10 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-server</artifactId>
-            <version>2.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-client</artifactId>
-            <version>2.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

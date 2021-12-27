@@ -26,7 +26,7 @@ import com.vaadin.flow.component.dependency.JsModule;
  * Value type is String, but the component works with LocalTime when using
  * it through the set/getTime api.
  */
-@Tag("time-selector")s
+@Tag("time-selector")
 @JsModule("./TimeSelector.js")
 public class TimeSelector
         extends AbstractSinglePropertyField<TimeSelector, String> {
