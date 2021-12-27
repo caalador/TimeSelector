@@ -48,4 +48,13 @@ public class CircleSelect
     public void setNumSlices(int slices) {
         getElement().setProperty("numSlices", Integer.toString(slices));
     }
+
+    public void setInnerValues(int... values) {
+        JsonArray array = Json.createArray();
+        for (int i = 0; i < values.length; i++) {
+            array.set(i, Integer.toString(values[i]));
+        }
+        getElement().setPropertyJson("innerValues", array);
+        getElement().setPropertyJson("numbers", Json.createArray());
+    }
 }
