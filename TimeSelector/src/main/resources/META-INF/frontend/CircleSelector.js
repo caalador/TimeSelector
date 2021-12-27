@@ -136,11 +136,13 @@ class CircleSelector extends PolymerElement {
       ctx.closePath();
       ctx.fill();
 
-      ctx.beginPath();
-      ctx.fillStyle = "seagreen";
-      ctx.arc(x, y, 2, 0, 2 * Math.PI, false);
-      ctx.closePath();
-      ctx.fill();
+      if(this._noNumber()) {
+        ctx.beginPath();
+        ctx.fillStyle = "seagreen";
+        ctx.arc(x, y, 2, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+      }
     }
 
     ctx.strokeStyle = "black";
@@ -150,6 +152,21 @@ class CircleSelector extends PolymerElement {
       let number = this.numbers[i];
       ctx.fillText(number.text, number.x, number.y);
     }
+  }
+
+  _noNumber() {
+    if(this.selection == this.sectors) {
+      // If selection is on the first slice
+      return false;
+    }
+    for (var i = 0; i < this.numbers.length; i++) {
+      let number = this.numbers[i];
+      if(this.selection == number.text) {
+        // If selection is on a rendered number
+        return false;
+      }
+    }
+    return true;
   }
 
   _onSelect(event) {
@@ -235,12 +252,18 @@ class CircleSelector extends PolymerElement {
     let ctx = this.ctx;
 
     let degreesPerStep = 360 / this.values.length;
+    let textMetrics = ctx.measureText("0123456789");
+    let textHeight = textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
+    let textHalfHeight = textHeight / 2;
+
     for (var i = 1; i <= this.values.length; i++) {
+      let halfWidth = Math.ceil(ctx.measureText(this.values[i - 1]).width) /2;
+
       let degrees = i * degreesPerStep;
       let rad = (degrees * Math.PI / 180) - (0.5 * Math.PI);
 
-      let x = this.circleX + (Math.cos(rad) * (this.radian - 15)) - this.halfWidth;
-      let y = this.circleY + (Math.sin(rad) * (this.radian - 15)) + (ctx.measureText("W").width / 2);
+      let x = this.circleX + (Math.cos(rad) * (this.radian - 15)) - halfWidth;
+      let y = this.circleY + (Math.sin(rad) * (this.radian - 15)) + textHalfHeight;
 
       this.numbers.push({
         text: this.values[i - 1],
@@ -250,11 +273,12 @@ class CircleSelector extends PolymerElement {
     }
     if (this.innerValues.length > 0) {
       for (var i = 1; i <= this.innerValues.length; i++) {
+        let halfWidth = Math.ceil(ctx.measureText(this.innerValues[i - 1]).width) /2;
         let degrees = i * degreesPerStep;
         let rad = (degrees * Math.PI / 180) - (0.5 * Math.PI);
 
-        let x = this.circleX + (Math.cos(rad) * (this.radian / 2)) - this.halfWidth;
-        let y = this.circleY + (Math.sin(rad) * (this.radian / 2)) + (ctx.measureText("W").width / 2);
+        let x = this.circleX + (Math.cos(rad) * (this.radian / 2)) - halfWidth;
+        let y = this.circleY + (Math.sin(rad) * (this.radian / 2)) + textHalfHeight;
 
         this.numbers.push({
           text: this.innerValues[i - 1],
