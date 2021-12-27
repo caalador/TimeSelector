@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.percepta.mgrankvi</groupId>
+        <groupId>org.vaadin.addons.mgrankvi</groupId>
         <artifactId>TimeSelector-root</artifactId>
-        <version>14.8.0-beta1</version>
+        <version>14.0.0-beta1</version>
     </parent>
 
     <artifactId>time-selector-demo</artifactId>
@@ -19,7 +19,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.percepta.mgrankvi</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>TimeSelector</artifactId>
             <version>${project.version}</version>
         </dependency>

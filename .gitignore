@@ -15,3 +15,10 @@ TimeSelector-demo/package-lock.json
 .vscode
 .project
 **/.classpath
+TimeSelector-demo/frontend/generated
+TimeSelector-demo/frontend/index.html
+TimeSelector-demo/.npmrc
+TimeSelector-demo/pnpmfile.js
+TimeSelector-demo/pnpm-lock.yaml
+TimeSelector-demo/tsconfig.json
+TimeSelector-demo/types.d.ts

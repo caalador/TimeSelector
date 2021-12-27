@@ -88,7 +88,7 @@ public class TimeSelectorDemo extends VerticalLayout {
         minutes.addValueChangeListener(e ->
                 Notification.show("Selected from minutes: " + minutes.getValue())
         );
-        Html minutesLabel = new Html("Sectors: 60<br/>Values: 5,10,15,20,25,30,35,40,45,50,55,0<br/>Note! 0 returns 60");
+        Span minutesLabel = new Span("Sectors: 60\nValues: 5,10,15,20,25,30,35,40,45,50,55,0\nNote! 0 returns 60");
         circles.add(new VerticalLayout(minutes, minutesLabel));
 
         final CircleSelect fullDay = new CircleSelect();
@@ -97,8 +97,8 @@ public class TimeSelectorDemo extends VerticalLayout {
         fullDay.setInnerValues(13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24);
         fullDay.setValue(18);
         fullDay.addValueChangeListener(e -> Notification.show("Selected from full day: " + fullDay.getValue()));
-        Html fullDayLabel = new Html("Sectors: 12<br/>Values: 1,2,3,4,5,6,7,8,9,10,11,0<br/>Inner values: 13,14,15,16,17,18,19,20,21,22,23,24" +
-                "<br/>Note! values are returned the same as the labels.");
+        Span fullDayLabel = new Span("Sectors: 12\nValues: 1,2,3,4,5,6,7,8,9,10,11,0\nInner values: 13,14,15,16,17,18,19,20,21,22,23,24" +
+                "\nNote! values are returned the same as the labels.");
         circles.add(new VerticalLayout(fullDay, fullDayLabel));
 
         final CircleSelect restricted = new CircleSelect();
@@ -106,7 +106,7 @@ public class TimeSelectorDemo extends VerticalLayout {
         restricted.setSectors(4);
         restricted.addValueChangeListener(e -> Notification.show("Selected from restricted: " + restricted.getValue()));
 
-        Html restrictedLabel = new Html("Sectors: 4<br/>Values: 15,30,45,0");
+        Span restrictedLabel = new Span("Sectors: 4\nValues: 15,30,45,0");
         circles.add(new VerticalLayout(restricted, restrictedLabel));
 
         contentLayout.add(circles);

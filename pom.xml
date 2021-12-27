@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.percepta.mgrankvi</groupId>
+    <groupId>org.vaadin.addons.mgrankvi</groupId>
     <artifactId>TimeSelector-root</artifactId>
     <packaging>pom</packaging>
     <name>TimeSelector Add-on Root Project</name>
-    <version>14.8.0-beta1</version>
+    <version>14.0.0-beta1</version>
 
     <properties>
         <vaadin.version>14.8.0</vaadin.version>
