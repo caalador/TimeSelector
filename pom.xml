@@ -6,7 +6,7 @@
     <artifactId>TimeSelector-root</artifactId>
     <packaging>pom</packaging>
     <name>TimeSelector Add-on Root Project</name>
-    <version>14.8.0</version>
+    <version>14.8.0-beta1</version>
 
     <properties>
         <vaadin.version>14.8.0</vaadin.version>
