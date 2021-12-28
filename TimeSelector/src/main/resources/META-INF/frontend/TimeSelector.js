@@ -55,6 +55,10 @@ class TimeSelector extends PolymerElement {
       updating: {
         type: Boolean,
         value: false
+      },
+      twentyFour: {
+        type: Boolean,
+        value: true
       }
     }
   }
@@ -64,6 +68,7 @@ class TimeSelector extends PolymerElement {
     document.body.appendChild(popup);
     popup.hours = this._parseHours();
     popup.minutes = this._parseMinutes();
+    popup.twentyFour = this.twentyFour;
     popup._populateString();
     popup._initializeCircle();
 

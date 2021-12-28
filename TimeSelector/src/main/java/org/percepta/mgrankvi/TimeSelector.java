@@ -49,4 +49,7 @@ public class TimeSelector
         return LocalTime.parse(getValue());
     }
 
+    public void setTwentyFour(boolean twentyFour) {
+        getElement().setProperty("twentyFour", twentyFour);
+    }
 }
