@@ -17,7 +17,6 @@ package org.percepta.mgrankvi;
 
 import java.time.LocalTime;
 
-import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;

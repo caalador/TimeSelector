@@ -87,12 +87,20 @@ class TimeSelector extends PolymerElement {
 
   // Parse the current minute value from the value string
   _parseMinutes() {
-    return this.value.substring(this.value.indexOf(":") + 1, this.value.length);
+    if(this.twentyFour) {
+      return this.value.substring(this.value.indexOf(":") + 1, this.value.length);
+    } else {
+      return this.value.substring(this.value.indexOf(":") + 1, this.value.length-2);
+    }
   }
 
   // Parse the current hour value from the value string
   _parseHours() {
-    return this.value.substring(0, this.value.indexOf(":"))
+    if(!this.twentyFour && this.value.endsWith("pm")) {
+      return Number(this.value.substring(0, this.value.indexOf(":"))) + 12;
+    } else {
+      return this.value.substring(0, this.value.indexOf(":"));
+    }
   }
 
   _populateString(hours, minutes) {
@@ -102,7 +110,11 @@ class TimeSelector extends PolymerElement {
     if (minutes.length < 2) {
       minutes = '0' + minutes;
     }
-    this.value = hours + ':' + minutes;
+    if(this.twentyFour) {
+      this.value = hours + ':' + minutes;
+    } else {
+      this.value = (Number(hours) > 12 ? Number(hours)-12 : hours) + ':' + minutes + (hours > 12 ? 'pm':'am');
+    }
   }
 }
 

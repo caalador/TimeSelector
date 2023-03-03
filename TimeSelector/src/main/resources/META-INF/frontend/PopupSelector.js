@@ -112,8 +112,8 @@ export class PopupSelector extends PolymerElement {
                     <label class="selector-number" id="minuteLabel" on-click="_initMinutes">[[minutes]]</label>
                     <template id="am-pm-if" is="dom-if" if="{{!twentyFour}}">
                         <div class="am-pm-labels" style="display: flex; flex-direction: column; justify-content: center; ">
-                          <label class="am-pm" id="amLabel">AM</label>
-                          <label class="am-pm" id="pmLabel">PM</label>
+                          <label class="am-pm" id="amLabel" on-click="_setAm">AM</label>
+                          <label class="am-pm" id="pmLabel" on-click="_setPm">PM</label>
                         </div>
                     </template>
                 </div>
@@ -185,6 +185,9 @@ export class PopupSelector extends PolymerElement {
   }
 
   _populateString() {
+    if(!this.twentyFour && this.hours > 12) {
+      this.hours -= 12;
+    }
     if (this.hours == 24) {
       this.hours = 0;
     }
@@ -206,20 +209,27 @@ export class PopupSelector extends PolymerElement {
     if(this.twentyFour) {
       this.selector.innerValues = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
     }else {
-      // Timing issue can not find element
-      // if (this.hours >= 12) {
-      //   this.shadowRoot.querySelector('#amLabel').classList.remove("selected");
-      //   this.shadowRoot.querySelector('#pmLabel').classList.add("selected");
-      // } else {
-      //   this.shadowRoot.querySelector('#amLabel').classList.add("selected");
-      //   this.shadowRoot.querySelector('#pmLabel').classList.remove("selected");
-      // }
+      // Small sleep before marking the selected label.
+      setTimeout(() => {
+        if (this.hours >= 12) {
+          this.shadowRoot.querySelector('#amLabel').classList.remove("selected");
+          this.shadowRoot.querySelector('#pmLabel').classList.add("selected");
+        } else {
+          this.shadowRoot.querySelector('#amLabel').classList.add("selected");
+          this.shadowRoot.querySelector('#pmLabel').classList.remove("selected");
+        }
+        this._populateString();
+      }, 2);
     }
     this.selector.numbers = [];
     this.selector.numSlices = 24;
 
     this.updating = true;
-    this.selector.selection = this.selector.actualSelection = this.hours;
+    if(this.twentyFour) {
+      this.selector.selection = this.selector.actualSelection = this.hours;
+    } else {
+      this.selector.selection = this.selector.actualSelection = this.hours%12;
+    }
     this.updating = false;
 
     this.showingHours = true;
@@ -249,7 +259,20 @@ export class PopupSelector extends PolymerElement {
     this.$.minuteLabel.classList.add("selected");
   }
 
+  _setAm() {
+    this.shadowRoot.querySelector('#amLabel').classList.add("selected");
+    this.shadowRoot.querySelector('#pmLabel').classList.remove("selected");
+  }
+
+  _setPm() {
+    this.shadowRoot.querySelector('#amLabel').classList.remove("selected");
+    this.shadowRoot.querySelector('#pmLabel').classList.add("selected");
+  }
+
   _selectAndClose() {
+    if(!this.twentyFour && this.shadowRoot.querySelector('#pmLabel').classList.contains("selected")){
+      this.hours = "" + (Number(this.hours) + 12);
+    }
     this.dispatchEvent(new CustomEvent('values', {
       detail: {
         hours: this.hours,
