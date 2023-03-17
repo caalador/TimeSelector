@@ -17,7 +17,7 @@ package org.percepta.mgrankvi;
 
 import java.time.LocalTime;
 
-import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -29,12 +29,24 @@ import com.vaadin.flow.router.Route;
 @Route("")
 public class TimeSelectorDemo extends VerticalLayout {
 
+    boolean twentyFour = true;
+
     public TimeSelectorDemo() {
         TimeSelector timeSelector = new TimeSelector();
         timeSelector.setTime(LocalTime.of(10, 25));
 
         timeSelector.addValueChangeListener(
                 event -> System.out.println(event.getValue()));
+
+        Button amPm = new Button("am/pm", clickEvent -> {
+            twentyFour = !twentyFour;
+            timeSelector.setTwentyFour(twentyFour);
+            if (twentyFour) {
+                clickEvent.getSource().setText("Switch to am/pm");
+            } else {
+                clickEvent.getSource().setText("Switch to twenty four");
+            }
+        });
 
         final CircleSelect circle = new CircleSelect();
         circle.setSectors(60);
@@ -66,9 +78,10 @@ public class TimeSelectorDemo extends VerticalLayout {
         content.setSizeUndefined();
         content.setSpacing(true);
         contentLayout.add(content);
-        content.add(timeSelector);
+        content.add(amPm, timeSelector);
 
         HorizontalLayout circles = new HorizontalLayout();
+        circles.setWidthFull();
         circles.setSpacing(true);
         circles.setId("circles-layout");
         Label l = new Label("CircleSelect as freestanding component");
