@@ -6,10 +6,10 @@
     <artifactId>TimeSelector-root</artifactId>
     <packaging>pom</packaging>
     <name>TimeSelector Add-on Root Project</name>
-    <version>23.3.0-beta1</version>
+    <version>24.0.0-beta1</version>
 
     <properties>
-        <vaadin.version>23.3.6</vaadin.version>
+        <vaadin.version>24.0.0</vaadin.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -18,7 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        <jetty.version>9.4.43.v20210629</jetty.version>
+        <jetty.version>11.0.14</jetty.version>
     </properties>
 
     <repositories>
