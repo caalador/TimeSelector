@@ -22,3 +22,5 @@ TimeSelector-demo/pnpmfile.js
 TimeSelector-demo/pnpm-lock.yaml
 TimeSelector-demo/tsconfig.json
 TimeSelector-demo/types.d.ts
+TimeSelector-demo/vite.generated.ts
+TimeSelector-demo/vite.config.ts

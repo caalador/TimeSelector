@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.vaadin.addons.mgrankvi</groupId>
         <artifactId>TimeSelector-root</artifactId>
-        <version>14.0.0-beta1</version>
+        <version>23.3.0-beta1</version>
     </parent>
 
     <artifactId>TimeSelector</artifactId>
@@ -34,6 +34,10 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-polymer-template</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -97,6 +101,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.5.0</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
