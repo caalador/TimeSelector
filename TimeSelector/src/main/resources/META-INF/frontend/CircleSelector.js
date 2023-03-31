@@ -253,7 +253,7 @@ class CircleSelector extends PolymerElement {
 
   _contains(list, value) {
     for (var i = 0; i < list.length; i++) {
-      if (list[i] === value) {
+      if (list[i] == value) {
         return true;
       }
     }

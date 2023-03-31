@@ -31,7 +31,7 @@ class TimeSelector extends PolymerElement {
             }
         </style>
 
-        <label class="time-selector" on-click="_openCircle">[[value]]</label>`;
+        <label class="time-selector" on-click="_openCircle">[[time]]</label>`;
   }
 
   static get is() {
@@ -41,6 +41,10 @@ class TimeSelector extends PolymerElement {
   static get properties() {
     return {
       value: {
+        type: String,
+        notify: true
+      },
+      time: {
         type: String,
         notify: true
       },
@@ -58,9 +62,17 @@ class TimeSelector extends PolymerElement {
       },
       twentyFour: {
         type: Boolean,
-        value: true
+        value: true,
+        notify: true
       }
     }
+  }
+
+  ready() {
+    super.ready();
+    this.time = this.value;
+    this.addEventListener('value-changed', (value) => this.time = value);
+    this.addEventListener('twenty-four-changed', () => this._populateString(this._parseHours(), this._parseMinutes()));
   }
 
   _openCircle() {
@@ -71,6 +83,7 @@ class TimeSelector extends PolymerElement {
     popup.twentyFour = this.twentyFour;
     popup._populateString();
     popup._initializeCircle();
+
 
     popup.addEventListener('values', function (event) {
       this._valueChange(event)
@@ -87,20 +100,12 @@ class TimeSelector extends PolymerElement {
 
   // Parse the current minute value from the value string
   _parseMinutes() {
-    if(this.twentyFour) {
-      return this.value.substring(this.value.indexOf(":") + 1, this.value.length);
-    } else {
-      return this.value.substring(this.value.indexOf(":") + 1, this.value.length-2);
-    }
+    return this.value.substring(this.value.indexOf(":") + 1, this.value.length);
   }
 
   // Parse the current hour value from the value string
   _parseHours() {
-    if(!this.twentyFour && this.value.endsWith("pm")) {
-      return Number(this.value.substring(0, this.value.indexOf(":"))) + 12;
-    } else {
-      return this.value.substring(0, this.value.indexOf(":"));
-    }
+    return this.value.substring(0, this.value.indexOf(":"));
   }
 
   _populateString(hours, minutes) {
@@ -110,10 +115,16 @@ class TimeSelector extends PolymerElement {
     if (minutes.length < 2) {
       minutes = '0' + minutes;
     }
+    this.value = hours + ':' + minutes;
     if(this.twentyFour) {
-      this.value = hours + ':' + minutes;
+      this.time = hours + ':' + minutes;
     } else {
-      this.value = (Number(hours) > 12 ? Number(hours)-12 : hours) + ':' + minutes + (hours > 12 ? 'pm':'am');
+      let amPm = hours > 12 ? 'pm' : 'am';
+      let hourString = Number(hours) > 12 ? Number(hours) - 12 : hours;
+      if (hourString.length < 2) {
+        hourString = '0' + hourString;
+      }
+      this.time = hourString + ':' + minutes + amPm;
     }
   }
 }

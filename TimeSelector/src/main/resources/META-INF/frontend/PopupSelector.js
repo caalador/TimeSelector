@@ -107,7 +107,7 @@ export class PopupSelector extends PolymerElement {
             <div class="content">
                 <div class="time-label selector-popup-top" style="display: flex; justify-content: center;">
                     <!-- Labels will create format as "00:00" -->
-                    <label class="selector-number" id="hourLabel" on-click="_initHours">[[hours]]</label>
+                    <label class="selector-number" id="hourLabel" on-click="_initHours">[[visualHours]]</label>
                     <label class="selector-number">:</label>
                     <label class="selector-number" id="minuteLabel" on-click="_initMinutes">[[minutes]]</label>
                     <template id="am-pm-if" is="dom-if" if="{{!twentyFour}}">
@@ -137,6 +137,9 @@ export class PopupSelector extends PolymerElement {
       hours: {
         type: String
       },
+      visualHours: {
+        type: String
+      },
       minutes: {
         type: String
       },
@@ -153,6 +156,10 @@ export class PopupSelector extends PolymerElement {
         value: new CircleSelector()
       },
       twentyFour: {
+        type: Boolean,
+        value: false
+      },
+      isPm: {
         type: Boolean
       }
     }
@@ -186,18 +193,22 @@ export class PopupSelector extends PolymerElement {
 
   _populateString() {
     if(!this.twentyFour && this.hours > 12) {
-      this.hours -= 12;
+      this.isPm = true;
+      this.visualHours =  this.hours - 12;
+    } else {
+      this.isPm = false;
+      this.visualHours = this.hours;
     }
-    if (this.hours == 24) {
-      this.hours = 0;
+    if (this.visualHours === 24) {
+      this.visualHours = 0;
     }
-    if (this.minutes == 60) {
+    if (this.minutes === 60) {
       this.minutes = 0;
     }
-    this.hours = (this.hours + '');
+    this.visualHours = (this.visualHours + '');
     this.minutes = (this.minutes + '');
-    if (this.hours.length < 2) {
-      this.hours = '0' + this.hours;
+    if (this.visualHours.length < 2) {
+      this.visualHours = '0' + this.visualHours;
     }
     if (this.minutes.length < 2) {
       this.minutes = '0' + this.minutes;
@@ -209,16 +220,20 @@ export class PopupSelector extends PolymerElement {
     if(this.twentyFour) {
       this.selector.innerValues = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
     }else {
+      this._populateString();
       // Small sleep before marking the selected label.
       setTimeout(() => {
-        if (this.hours >= 12) {
+        // As we call this with undefined twentFour for some reason cancel if we do not find the am/pm labels
+        if(!this.shadowRoot.querySelector('#amLabel')) {
+          return;
+        }
+        if (this.isPm) {
           this.shadowRoot.querySelector('#amLabel').classList.remove("selected");
           this.shadowRoot.querySelector('#pmLabel').classList.add("selected");
         } else {
           this.shadowRoot.querySelector('#amLabel').classList.add("selected");
           this.shadowRoot.querySelector('#pmLabel').classList.remove("selected");
         }
-        this._populateString();
       }, 2);
     }
     this.selector.numbers = [];
@@ -262,17 +277,16 @@ export class PopupSelector extends PolymerElement {
   _setAm() {
     this.shadowRoot.querySelector('#amLabel').classList.add("selected");
     this.shadowRoot.querySelector('#pmLabel').classList.remove("selected");
+    this.hours = "" + (Number(this.hours) - 12);
   }
 
   _setPm() {
     this.shadowRoot.querySelector('#amLabel').classList.remove("selected");
     this.shadowRoot.querySelector('#pmLabel').classList.add("selected");
+    this.hours = "" + (Number(this.hours) + 12);
   }
 
   _selectAndClose() {
-    if(!this.twentyFour && this.shadowRoot.querySelector('#pmLabel').classList.contains("selected")){
-      this.hours = "" + (Number(this.hours) + 12);
-    }
     this.dispatchEvent(new CustomEvent('values', {
       detail: {
         hours: this.hours,
